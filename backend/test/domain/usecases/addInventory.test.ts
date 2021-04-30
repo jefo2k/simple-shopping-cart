@@ -1,5 +1,4 @@
-import { Inventory, Product } from "../../../src/domain/entities"
-import { InventoryItem } from '../../../src/domain/entities/inventory';
+import { Inventory, InventoryItem, Product } from "../../../src/domain/entities"
 
 describe("add inventory use case tests", () => {
   const inventory = new Inventory()
