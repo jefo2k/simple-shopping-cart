@@ -1,9 +1,5 @@
-import { InventoryItem } from '../../../src/domain/entities';
-import { addInventoryItem, loadInventoryItem } from "../../../src/domain/usecases"
-
-interface InventoryStore {
-  save: () => void
-}
+import { InventoryStore } from '../../../src/data/ports'
+import { LocalInventoryManager } from '../../../src/services'
 
 class InventoryStoreSpy implements InventoryStore {
   addCallsCount = 0
@@ -12,20 +8,6 @@ class InventoryStoreSpy implements InventoryStore {
   save (): void {
     this. addCallsCount++
   }
-}
-
-class LocalInventoryManager implements addInventoryItem, loadInventoryItem {
-  constructor(
-    private readonly inventoryStore: InventoryStore
-  ) {}
-
-  async save(): Promise<void> {
-    this.inventoryStore.save()
-  }
-  
-  add(_: InventoryItem) {}
-  
-  load() {}
 }
 
 describe('Inventory manager tests', () => {

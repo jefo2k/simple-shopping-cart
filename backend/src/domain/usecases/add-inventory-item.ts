@@ -1,5 +1,5 @@
 import { InventoryItem } from '../entities'
 
-export interface addInventoryItem {
+export interface AddInventoryItem {
   add: (inventoryItem: InventoryItem) => void
 }

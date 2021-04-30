@@ -1,3 +1,3 @@
-export interface loadInventoryItem {
+export interface LoadInventoryItem {
   load: () => void
 }

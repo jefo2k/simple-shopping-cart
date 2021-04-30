@@ -1,3 +1,3 @@
-export interface loadProduct {
+export interface LoadProduct {
   load: () => void
 }

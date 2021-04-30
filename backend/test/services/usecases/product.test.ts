@@ -1,9 +1,5 @@
-import { Product } from '../../../src/domain/entities';
-import { addProduct, loadProduct } from "../../../src/domain/usecases"
-
-interface ProductStore {
-  save: () => void
-}
+import { LocalProductManager } from '../../../src/services'
+import { ProductStore } from '../../../src/data/ports'
 
 class ProductStoreSpy implements ProductStore {
   addCallsCount = 0
@@ -12,20 +8,6 @@ class ProductStoreSpy implements ProductStore {
   save (): void {
     this. addCallsCount++
   }
-}
-
-class LocalProductManager implements addProduct, loadProduct {
-  constructor(
-    private readonly ProductStore: ProductStore
-  ) {}
-
-  async save(): Promise<void> {
-    this.ProductStore.save()
-  }
-  
-  add(_: Product) {}
-  
-  load() {}
 }
 
 describe('Product manager tests', () => {
