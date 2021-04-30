@@ -1,5 +1,5 @@
+import { InventoryItem } from '../../../src/domain/entities';
 import { InventoryManager } from "../../../src/domain/usecases"
-import { InventoryItem } from '../../../src/domain/entities/inventory';
 
 interface InventoryStore {
   save: () => void

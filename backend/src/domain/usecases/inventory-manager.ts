@@ -1,4 +1,4 @@
-import { InventoryItem } from '../entities/inventory';
+import { InventoryItem } from '../entities';
 
 export interface InventoryManager {
   add: (inventoryItem: InventoryItem) => void
