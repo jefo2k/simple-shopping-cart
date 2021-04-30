@@ -1,16 +1,17 @@
-export class Inventory {
-  private inventoryItems: InventoryItem[]
+export class InventoryItem {
 
-  constructor() {
-    this.inventoryItems = []
+  constructor(
+    private productId: string,
+    private quantity: number
+  ) {
+    
   }
 
-  public add(inventoryItem: InventoryItem) {
-    this.inventoryItems.push(inventoryItem)
+  public getProductId() {
+    return this.productId
   }
-}
 
-export type InventoryItem = {
-  productId: string
-  quantity: number
+  public getQuantity() {
+    return this.quantity
+  }
 }

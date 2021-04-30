@@ -1,2 +1,1 @@
-export * from './addInventory'
-export * from './loadInventory'
+export * from './inventory-manager'
