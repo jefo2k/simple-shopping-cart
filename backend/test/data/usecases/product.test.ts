@@ -1,5 +1,5 @@
 import { Product } from '../../../src/domain/entities';
-import { ProductManager } from "../../../src/domain/usecases"
+import { addProduct, loadProduct } from "../../../src/domain/usecases"
 
 interface ProductStore {
   save: () => void
@@ -14,7 +14,7 @@ class ProductStoreSpy implements ProductStore {
   }
 }
 
-class LocalProductManager implements ProductManager {
+class LocalProductManager implements addProduct, loadProduct {
   constructor(
     private readonly ProductStore: ProductStore
   ) {}

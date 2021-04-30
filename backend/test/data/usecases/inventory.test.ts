@@ -1,5 +1,5 @@
 import { InventoryItem } from '../../../src/domain/entities';
-import { InventoryManager } from "../../../src/domain/usecases"
+import { addInventoryItem, loadInventoryItem } from "../../../src/domain/usecases"
 
 interface InventoryStore {
   save: () => void
@@ -14,7 +14,7 @@ class InventoryStoreSpy implements InventoryStore {
   }
 }
 
-class LocalInventoryManager implements InventoryManager {
+class LocalInventoryManager implements addInventoryItem, loadInventoryItem {
   constructor(
     private readonly inventoryStore: InventoryStore
   ) {}
