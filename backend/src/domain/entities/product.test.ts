@@ -1,6 +1,85 @@
 import { Product } from '.'
 
 describe('Product entity tests', () => {
+  it('Should not instantiate a product with an empty id', () => {
+    expect(() => {
+      new Product('', 'product 1', 'product 1 description')
+    }).toThrowError('invalid id, must not be empty')
+
+    expect(() => {
+      new Product(' ', 'product 1', 'product 1 description')
+    }).toThrowError('invalid id, must not be empty')
+
+    expect(() => {
+      new Product(undefined, 'product 1', 'product 1 description')
+    }).toThrowError('invalid id, must not be empty')
+
+    expect(() => {
+      new Product(null, 'product 1', 'product 1 description')
+    }).toThrowError('invalid id, must not be empty')
+  })
+
+  it('Should not instantiate a product with an empty name', () => {
+    expect(() => {
+      new Product('1', '', 'product 1 description')
+    }).toThrowError('invalid name, must not be empty')
+
+    expect(() => {
+      new Product('1', ' ', 'product 1 description')
+    }).toThrowError('invalid name, must not be empty')
+
+    expect(() => {
+      new Product('1', undefined, 'product 1 description')
+    }).toThrowError('invalid name, must not be empty')
+
+    expect(() => {
+      new Product('1', null, 'product 1 description')
+    }).toThrowError('invalid name, must not be empty')
+  })
+
+  it('Should not instantiate a product with name length greater than 60', () => {
+    expect(() => {
+      new Product(
+        '1', 
+        '1234567890123456789012345678901234567890123456789012345678901',
+        'Product 1 description'
+      )
+    }).toThrowError('invalid name, has more than 60 chars')
+  })
+
+  it('Should not instantiate a product with an empty description', () => {
+    expect(() => {
+      new Product('1', 'product 1', '')
+    }).toThrowError('invalid description, must not be empty')
+
+    expect(() => {
+      new Product('1', 'product 1', ' ')
+    }).toThrowError('invalid description, must not be empty')
+
+    expect(() => {
+      new Product('1', 'product 1', undefined)
+    }).toThrowError('invalid description, must not be empty')
+
+    expect(() => {
+      new Product('1', 'product 1', null)
+    }).toThrowError('invalid description, must not be empty')
+  })
+
+  it('Should not instantiate a product with description length greater than 255', () => {
+    expect(() => {
+      new Product(
+        '1', 
+        'product 1',
+        `12345678901234567890123456789012345678901234567890\
+         12345678901234567890123456789012345678901234567890\
+         12345678901234567890123456789012345678901234567890\
+         12345678901234567890123456789012345678901234567890\
+         12345678901234567890123456789012345678901234567890\
+         123456`.replace(/  +/g, '')
+      )
+    }).toThrowError('invalid description, has more than 255 chars')
+  })
+
   const product = new Product('1', 'Product 1', 'Product 1 description')
 
   it('Smoking test: Mandatory fields getters must return correct values', () => {

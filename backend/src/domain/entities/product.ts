@@ -7,13 +7,17 @@ export class Product {
   private updatedAt: Date
 
   constructor(id: string, name: string, description: string) {
-      this.id = id
-      this.name = name
-      this.description = description
+    this.validateParams(id, name, description)
 
-      const today = new Date()
-      this.createdAt = today
-      this.updatedAt = today
+    this.id = id
+    this.name = name
+    this.description = description
+
+    const today = new Date()
+    this.createdAt = today
+    this.updatedAt = today
+
+    // Object.freeze(this)
   }
 
   // getters
@@ -60,6 +64,14 @@ export class Product {
   // handler functions
   private setUpdatedAt() {
     this.updatedAt = new Date()
+  }
+
+  private validateParams(id: string, name: string, description: string): void {
+    if (!id || id.trim().length < 1 ) throw new Error('invalid id, must not be empty')
+    if (!name || name.trim().length < 1) throw new Error('invalid name, must not be empty')
+    if (name.length > 60) throw new Error('invalid name, has more than 60 chars')
+    if (!description || description.trim().length < 1) throw new Error('invalid description, must not be empty')
+    if (description.length > 255) throw new Error('invalid description, has more than 255 chars')
   }
 
 }
