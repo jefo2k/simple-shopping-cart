@@ -1,5 +1,5 @@
-import { LocalProductManager } from '.'
-import { ProductStore } from '../data/ports'
+import { ProductStore } from '../../data/ports'
+import { AddProductOnCatalog } from './add-product-on-catalog'
 
 class ProductStoreSpy implements ProductStore {
   addCallsCount = 0
@@ -12,17 +12,9 @@ class ProductStoreSpy implements ProductStore {
 
 describe('Product manager tests', () => {
   
-  it('should not load Product on init', () => {
-    const inventoryStore = new ProductStoreSpy()
-    new LocalProductManager(inventoryStore)
-
-    // inventoryManager.add(new Product('product1', 10))
-    expect(inventoryStore.addCallsCount).toBe(0)
-  })
-
   it('should call save once when an inventory item is added', async () => {
     const inventoryStore = new ProductStoreSpy()
-    const sut = new LocalProductManager(inventoryStore)
+    const sut = new AddProductOnCatalog(inventoryStore)
     await sut.save()
 
     // inventoryManager.add(new Product('product1', 10))

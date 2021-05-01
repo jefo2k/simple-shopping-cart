@@ -1,15 +1,15 @@
-import { Product } from '../../../src/domain/entities';
+import { Product } from '.'
 
-describe("Product entity tests", () => {
+describe('Product entity tests', () => {
   const product = new Product('1', 'Product 1', 'Product 1 description')
 
-  it("Smoking test: Mandatory fields getters must return correct values", () => {
+  it('Smoking test: Mandatory fields getters must return correct values', () => {
     expect(product.getId()).toBe('1')
     expect(product.getName()).toBe('Product 1')
     expect(product.getDescription()).toBe('Product 1 description')
   })
 
-  it("Smoking test: Setters must update values correctly", () => {
+  it('Smoking test: Setters must update values correctly', () => {
     product.setName('Product 1 updated v2')
     product.setDescription('Product 1 description updated v2')
     
@@ -17,7 +17,7 @@ describe("Product entity tests", () => {
     expect(product.getDescription()).toBe('Product 1 description updated v2')
   })
 
-  it("Update name or description must update updatedAt field", async () => {
+  it('Update name or description must update updatedAt field', async () => {
     const productUpdatedAtBeforeChange = product.getUpdatedAt()
     // waits for 100 miliseconds
     await new Promise((r) => setTimeout(r, 100))
