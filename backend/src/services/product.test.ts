@@ -1,5 +1,5 @@
-import { LocalProductManager } from '../../../src/services'
-import { ProductStore } from '../../../src/data/ports'
+import { LocalProductManager } from '.'
+import { ProductStore } from '../data/ports'
 
 class ProductStoreSpy implements ProductStore {
   addCallsCount = 0

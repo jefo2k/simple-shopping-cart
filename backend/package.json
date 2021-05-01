@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "Serverless webpack example using Typescript",
   "scripts": {
-    "test": "jest --no-cache",
-    "test:watch": "jest --no-cache --watchAll"
+    "test": "jest --passWithNoTests --no-cache",
+    "test:watch": "jest --passWithNoTests --no-cache --watchAll",
+    "test:ci": "npm test -- --coverage"
   },
   "dependencies": {
     "source-map-support": "^0.5.10"

@@ -1,5 +1,5 @@
-import { InventoryStore } from '../../../src/data/ports'
-import { LocalInventoryManager } from '../../../src/services'
+import { InventoryStore } from '../data/ports'
+import { LocalInventoryManager } from '.'
 
 class InventoryStoreSpy implements InventoryStore {
   addCallsCount = 0
