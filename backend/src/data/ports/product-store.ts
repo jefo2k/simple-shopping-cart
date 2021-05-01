@@ -1,3 +1,6 @@
+import { Product } from '../../domain/entities/product'
+
 export interface ProductStore {
-  save: () => void
+  save: (product: Product) => Promise<void>
+  loadById: (productId: string) => Promise<Product>
 }

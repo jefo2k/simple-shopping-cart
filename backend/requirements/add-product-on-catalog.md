@@ -6,12 +6,12 @@
 
 ## Exception - invalid name
 
-1. System returns an 'invalid name' custom error
+1. System returns an 'invalid name' error
 
 ## Exception - invalid description
 
-1. System returns an 'invalid description' custom error
+1. System returns an 'invalid description' error
 
-## Exception - duplicated product
+## Exception - product already exists
 
-1. System returns a 'duplicated product' custom error
+1. System returns a 'product already exists' error ✅

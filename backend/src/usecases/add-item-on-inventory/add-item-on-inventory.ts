@@ -7,9 +7,7 @@ export class AddItemOnInventory implements AddInventoryItem {
     private readonly inventoryStore: InventoryStore
   ) {}
 
-  async save(): Promise<void> {
+  async add(_: InventoryItem): Promise<void> {
     this.inventoryStore.save()
   }
-  
-  add(_: InventoryItem) {}
 }

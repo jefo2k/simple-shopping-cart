@@ -4,14 +4,17 @@ import { ProductStore } from '../../data/ports'
 
 export class AddProductOnCatalog implements AddProduct {
   constructor(
-    private readonly ProductStore: ProductStore
+    private readonly productStore: ProductStore
   ) {}
 
-  async save(): Promise<void> {
-    this.ProductStore.save()
+  async add(product: Product): Promise<void> {
+    const isProductAlreadyInCatalog = !!await this.productStore.loadById(product.getId())
+
+    if (isProductAlreadyInCatalog) {
+      throw new Error('product already exists')
+    }
+
+    this.productStore.save(product)
   }
-  
-  add(_: Product) {}
 
 }
-
