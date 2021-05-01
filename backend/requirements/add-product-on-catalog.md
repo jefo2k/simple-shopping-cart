@@ -2,7 +2,7 @@
 
 ## Success case
 
-1. A product is added to the product catalog
+1. A product is added to the product catalog ✅
 
 ## Exception - invalid name
 

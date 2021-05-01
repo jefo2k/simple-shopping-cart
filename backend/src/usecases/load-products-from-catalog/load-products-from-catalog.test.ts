@@ -15,6 +15,11 @@ class ProductStoreSpy implements ProductStore {
     const product = this.catalog.find(p => p.getId() === productId)
     return product
   }
+
+  async loadAll (): Promise<Product[]> {
+    const productList = this.catalog
+    return productList
+  }
 }
 
 describe('Product manager tests', () => {
