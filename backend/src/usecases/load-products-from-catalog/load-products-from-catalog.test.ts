@@ -29,4 +29,14 @@ describe('Product manager tests', () => {
     expect(productList).toHaveLength(3)
   })
 
+  it('should return an empty list if there is no products in catalog', async () => {
+    const productStore = new InMemoryProductStore()
+    
+    const sut = new LoadProductsFromCatalog(productStore)
+    const productList = await sut.load()
+
+    expect(productStore.addCallsCount).toBe(0)
+    expect(productList).toHaveLength(0)
+  })
+
 })
