@@ -2,7 +2,7 @@ import { AddItemOnInventory } from '..'
 import { InventoryItem } from '../../domain/entities'
 import { InMemoryInventoryStore } from '../../data/in-memory-inventory-store'
 import { InMemoryProductStore } from '../../data/in-memory-product-store/in-memory-product-store'
-import { Product } from '../../domain/entities/product';
+import { Product } from '../../domain/entities'
 
 describe('Add items on Inventory tests', () => {
 

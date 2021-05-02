@@ -1,4 +1,4 @@
-import { InventoryItem } from './inventory-item';
+import { InventoryItem } from './inventory-item'
 
 describe('Inventory item entity tests', () => {
   it('Should not instantiate an inventory item with an empty productId', () => {

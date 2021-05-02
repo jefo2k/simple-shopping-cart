@@ -1,7 +1,7 @@
 import { InventoryItem } from '../../domain/entities'
 import { AddInventoryItem } from '../ports'
 import { InventoryStore } from '../../data/ports'
-import { ProductStore } from '../../data/ports/product-store';
+import { ProductStore } from '../../data/ports/product-store'
 
 export class AddItemOnInventory implements AddInventoryItem {
   constructor(

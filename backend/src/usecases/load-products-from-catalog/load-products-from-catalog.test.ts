@@ -1,9 +1,9 @@
 import { LoadProductsFromCatalog } from './load-products-from-catalog'
 import { InMemoryProductStore } from '../../data/in-memory-product-store'
-import { Product } from '../../domain/entities/product'
+import { Product } from '../../domain/entities'
 import * as faker from 'faker'
 
-describe('Product manager tests', () => {
+describe('Load products from catalog usecase tests', () => {
   
   it('should not load Product on init', () => {
     const productStore = new InMemoryProductStore()

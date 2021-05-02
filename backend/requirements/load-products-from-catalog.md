@@ -1,4 +1,4 @@
-# Add product on catalog
+# Load products from catalog
 
 ## Success case
 

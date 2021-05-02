@@ -1,3 +1,5 @@
+import { InventoryItem } from '../../domain/entities'
+
 export interface LoadInventoryItems {
-  load: () => void
+  load: () => Promise<InventoryItem[]>
 }
