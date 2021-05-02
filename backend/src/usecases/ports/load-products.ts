@@ -1,3 +1,5 @@
+import { Product } from '../../domain/entities'
+
 export interface LoadProducts {
-  load: () => void
+  load: () => Promise<Product[]>
 }
