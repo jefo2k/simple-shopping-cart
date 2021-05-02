@@ -1,5 +1,5 @@
-import { ProductStore } from '../ports/product-store'
-import { Product } from '../../domain/entities'
+import { ProductStore } from '../../ports/product-store'
+import { Product } from '../../../domain/entities'
 
 export class InMemoryProductStore implements ProductStore {
   addCallsCount = 0

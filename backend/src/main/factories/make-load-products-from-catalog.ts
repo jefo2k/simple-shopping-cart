@@ -1,5 +1,5 @@
 import { LoadProductsFromCatalog } from '../../usecases'
-import { InMemoryProductStore } from '../../data/in-memory-product-store';
+import { InMemoryProductStore } from '../../data/in-memory/in-memory-product-store';
 import { Product } from '../../domain/entities/product';
 
 export const makeLoadProductsFromCatalog = (): LoadProductsFromCatalog => {

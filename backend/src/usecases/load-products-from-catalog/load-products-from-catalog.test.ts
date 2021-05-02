@@ -1,5 +1,5 @@
 import { LoadProductsFromCatalog } from './load-products-from-catalog'
-import { InMemoryProductStore } from '../../data/in-memory-product-store'
+import { InMemoryProductStore } from '../../data/in-memory/in-memory-product-store'
 import { Product } from '../../domain/entities'
 import * as faker from 'faker'
 

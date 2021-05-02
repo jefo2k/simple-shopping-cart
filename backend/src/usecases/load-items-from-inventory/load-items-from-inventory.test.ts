@@ -1,6 +1,6 @@
 import { LoadItemsFromInventory } from './load-items-from-inventory'
-import { InMemoryInventoryStore } from '../../data/in-memory-inventory-store'
-import { InMemoryProductStore } from '../../data/in-memory-product-store'
+import { InMemoryInventoryStore } from '../../data/in-memory/in-memory-inventory-store'
+import { InMemoryProductStore } from '../../data/in-memory/in-memory-product-store'
 import * as faker from 'faker'
 import { Product, InventoryItem } from '../../domain/entities'
 
