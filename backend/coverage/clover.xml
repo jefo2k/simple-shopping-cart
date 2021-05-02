@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1619883343424" clover="3.2.0">
+  <project timestamp="1619883343424" name="All files">
+    <metrics statements="41" coveredstatements="27" conditionals="0" coveredconditionals="0" methods="23" coveredmethods="12" elements="64" coveredelements="39" complexity="0" loc="41" ncloc="41" packages="4" files="8" classes="8"/>
+    <package name="domain.entities">
+      <metrics statements="26" coveredstatements="19" conditionals="0" coveredconditionals="0" methods="14" coveredmethods="8"/>
+      <file name="index.ts" path="/Users/jefo/workspace/udacity/cloud-developer/simple-shopping-cart/backend/src/domain/entities/index.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+      </file>
+      <file name="inventory-item.ts" path="/Users/jefo/workspace/udacity/cloud-developer/simple-shopping-cart/backend/src/domain/entities/inventory-item.ts">
+        <metrics statements="5" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+      </file>
+      <file name="product.ts" path="/Users/jefo/workspace/udacity/cloud-developer/simple-shopping-cart/backend/src/domain/entities/product.ts">
+        <metrics statements="19" coveredstatements="16" conditionals="0" coveredconditionals="0" methods="11" coveredmethods="8"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="25" count="2" type="stmt"/>
+        <line num="29" count="2" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="41" count="2" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="50" count="2" type="stmt"/>
+        <line num="51" count="2" type="stmt"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="57" count="1" type="stmt"/>
+        <line num="62" count="3" type="stmt"/>
+      </file>
+    </package>
+    <package name="domain.usecases">
+      <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="index.ts" path="/Users/jefo/workspace/udacity/cloud-developer/simple-shopping-cart/backend/src/domain/usecases/index.ts">
+        <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="0" type="stmt"/>
+        <line num="2" count="0" type="stmt"/>
+        <line num="3" count="0" type="stmt"/>
+        <line num="4" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="lambda">
+      <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <file name="handler.ts" path="/Users/jefo/workspace/udacity/cloud-developer/simple-shopping-cart/backend/src/lambda/handler.ts">
+        <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="2" count="0" type="stmt"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="5" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="services">
+      <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="4"/>
+      <file name="index.ts" path="/Users/jefo/workspace/udacity/cloud-developer/simple-shopping-cart/backend/src/services/index.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="2" count="2" type="stmt"/>
+      </file>
+      <file name="local-inventory-manager.ts" path="/Users/jefo/workspace/udacity/cloud-developer/simple-shopping-cart/backend/src/services/local-inventory-manager.ts">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="2"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+      </file>
+      <file name="local-product-manager.ts" path="/Users/jefo/workspace/udacity/cloud-developer/simple-shopping-cart/backend/src/services/local-product-manager.ts">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="2"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>
