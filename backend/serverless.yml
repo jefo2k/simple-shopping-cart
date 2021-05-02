@@ -22,9 +22,10 @@ provider:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
 
 functions:
-  hello:
-    handler: src/lambda/handler.hello
+  loadProducts:
+    handler: src/lambda/http/load-products.handler
     events:
       - http:
           method: get
-          path: hello
+          path: products
+          cors: true
