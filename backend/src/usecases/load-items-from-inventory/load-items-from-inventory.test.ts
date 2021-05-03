@@ -1,6 +1,6 @@
 import { LoadItemsFromInventory } from './load-items-from-inventory'
-import { InMemoryInventoryStore } from '../../data/in-memory-inventory-store'
-import { InMemoryProductStore } from '../../data/in-memory-product-store'
+import { InMemoryInventoryStore } from '../../data/in-memory/in-memory-inventory-store'
+import { InMemoryProductStore } from '../../data/in-memory/in-memory-product-store'
 import * as faker from 'faker'
 import { Product, InventoryItem } from '../../domain/entities'
 
@@ -18,17 +18,17 @@ describe('Load items from inventory usecase tests', () => {
     const product1 = new Product(faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription())
     const product2 = new Product(faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription())
     const product3 = new Product(faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription())
-    productStore.save(product1)
-    productStore.save(product2)
-    productStore.save(product3)
+    await productStore.save(product1)
+    await productStore.save(product2)
+    await productStore.save(product3)
 
     const inventoryStore = new InMemoryInventoryStore()
     const item1 = new InventoryItem(product1.getId(), faker.datatype.number(99))
     const item2 = new InventoryItem(product2.getId(), faker.datatype.number(99))
     const item3 = new InventoryItem(product3.getId(), faker.datatype.number(99))
-    inventoryStore.save(item1)
-    inventoryStore.save(item2)
-    inventoryStore.save(item3)
+    await inventoryStore.save(item1)
+    await inventoryStore.save(item2)
+    await inventoryStore.save(item3)
 
     const sut = new LoadItemsFromInventory(inventoryStore)
     const inventoryItemList = await sut.load()

@@ -1,6 +1,6 @@
 import { AddProductOnCatalog } from './add-product-on-catalog'
 import { Product } from '../../domain/entities/product'
-import { InMemoryProductStore } from '../../data/in-memory-product-store'
+import { InMemoryProductStore } from '../../data/in-memory/in-memory-product-store'
 
 describe('Add product on catalog tests', () => {
   

@@ -1,5 +1,5 @@
-import { InventoryStore } from '../ports/inventory-store'
-import { InventoryItem } from '../../domain/entities'
+import { InventoryStore } from '../../ports/inventory-store'
+import { InventoryItem } from '../../../domain/entities'
 
 export class InMemoryInventoryStore implements InventoryStore {
   addCallsCount = 0

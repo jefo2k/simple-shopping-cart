@@ -1,5 +1,5 @@
 import { LoadProductsFromCatalog } from './load-products-from-catalog'
-import { InMemoryProductStore } from '../../data/in-memory-product-store'
+import { InMemoryProductStore } from '../../data/in-memory/in-memory-product-store'
 import { Product } from '../../domain/entities'
 import * as faker from 'faker'
 
@@ -18,9 +18,9 @@ describe('Load products from catalog usecase tests', () => {
     const product1 = new Product(faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription())
     const product2 = new Product(faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription())
     const product3 = new Product(faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription())
-    productStore.save(product1)
-    productStore.save(product2)
-    productStore.save(product3)
+    await productStore.save(product1)
+    await productStore.save(product2)
+    await productStore.save(product3)
 
     const sut = new LoadProductsFromCatalog(productStore)
     const productList = await sut.load()
