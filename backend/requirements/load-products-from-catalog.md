@@ -2,11 +2,11 @@
 
 ## Success case
 
-1. Load all products from catalog ✅
+1. Load all products from a specific catalog ✅
 
 ## Exception - empty catalog
 
-1. System returns an empty list when there is no products in catalog ✅
+1. System returns an empty list when there is no products in a specific catalog ✅
 
 <!-- 
 ## Exception - load fail

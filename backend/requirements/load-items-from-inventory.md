@@ -2,11 +2,11 @@
 
 ## Success case
 
-1. Load all items from inventory ✅
+1. Load all items from a specific inventory ✅
 
 ## Exception - empty inventory
 
-1. System returns an empty list when there is no items in inventory ✅
+1. System returns an empty list when there is no items in a specific inventory ✅
 
 <!-- 
 ## Exception - load fail

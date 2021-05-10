@@ -2,7 +2,7 @@
 
 ## Success case
 
-1. A inventory item is added to the inventory ✅
+1. A inventory item is added into a specific inventory ✅
 
 ## Exception - product not found
 
