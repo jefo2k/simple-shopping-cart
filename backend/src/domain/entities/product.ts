@@ -27,6 +27,10 @@ export class Product {
   }
 
   // getters
+  public getTenantId() {
+    return this.tenantId
+  }
+
   public getId() {
     return this.id
   }

@@ -60,7 +60,8 @@ describe('Product entity tests', () => {
 
   it('Should not instantiate a product with name length greater than 60', () => {
     expect(() => {
-      new Product(TENANT_ID, 
+      new Product(
+        TENANT_ID, 
         faker.datatype.uuid(), 
         '1234567890123456789012345678901234567890123456789012345678901',
         faker.commerce.productName(),
@@ -89,7 +90,8 @@ describe('Product entity tests', () => {
 
   it('Should not instantiate a product with description length greater than 255', () => {
     expect(() => {
-      new Product(TENANT_ID, 
+      new Product(
+        TENANT_ID, 
         faker.datatype.uuid(), 
         faker.commerce.productName(),
         `12345678901234567890123456789012345678901234567890\
@@ -123,7 +125,8 @@ describe('Product entity tests', () => {
 
   it('Should not instantiate a product with a invalid thumbUrl', () => {
     expect(() => {
-      new Product(TENANT_ID, 
+      new Product(
+        TENANT_ID, 
         faker.datatype.uuid(), 
         faker.commerce.productName(),
         faker.commerce.productDescription(), 
@@ -139,6 +142,7 @@ describe('Product entity tests', () => {
   const product = new Product(TENANT_ID, productId, productName, productDescription, productThumbUrl)
 
   it('Smoking test: Mandatory fields getters must return correct values', () => {
+    expect(product.getTenantId()).toBe(TENANT_ID)
     expect(product.getId()).toBe(productId)
     expect(product.getName()).toBe(productName)
     expect(product.getDescription()).toBe(productDescription)
