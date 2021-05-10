@@ -9,7 +9,7 @@ describe('Add items on Inventory tests', () => {
   it('should add item into inventory if product exists on catalog', async () => {
     const inventoryStore = new InMemoryInventoryStore()
     const productStore = new InMemoryProductStore()
-    const product1 = new Product('product1', 'Product 1 Name', 'Product 1 description')
+    const product1 = new Product('product1', 'Product 1 Name', 'Product 1 description', 'non valid url')
     await productStore.save(product1)
 
     const sut = new AddItemOnInventory(inventoryStore, productStore)
@@ -41,7 +41,7 @@ describe('Add items on Inventory tests', () => {
   it('should not add an item if it already exists', async () => {
     const inventoryStore = new InMemoryInventoryStore()
     const productStore = new InMemoryProductStore()
-    const product1 = new Product('product1', 'Product 1 Name', 'Product 1 description')
+    const product1 = new Product('product1', 'Product 1 Name', 'Product 1 description', 'non valid url')
     await productStore.save(product1)
 
     const sut = new AddItemOnInventory(inventoryStore, productStore)

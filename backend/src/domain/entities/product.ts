@@ -3,15 +3,17 @@ export class Product {
   private id: string
   private name: string
   private description: string
+  private thumbUrl: string
   private createdAt: Date
   private updatedAt: Date
 
-  constructor(id: string, name: string, description: string) {
+  constructor(id: string, name: string, description: string, thumbUrl: string) {
     this.validateParams(id, name, description)
 
     this.id = id
     this.name = name
     this.description = description
+    this.thumbUrl = thumbUrl
 
     const today = new Date()
     this.createdAt = today
@@ -37,7 +39,7 @@ export class Product {
     return this.createdAt
   }
 
-  public getCreatedAtISOStr():string {
+  public getCreatedAtISOStr() {
     return this.createdAt.toISOString()
   }
 
@@ -45,8 +47,12 @@ export class Product {
     return this.updatedAt
   }
 
-  public getUpdatedAtISOStr():string {
+  public getUpdatedAtISOStr() {
     return this.updatedAt.toISOString()
+  }
+
+  public getThumbUrl() {
+    return this.thumbUrl
   }
 
   // setters

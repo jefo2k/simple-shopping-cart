@@ -15,9 +15,9 @@ describe('Load items from inventory usecase tests', () => {
 
   it('should load all items from inventory', async () => {
     const productStore = new InMemoryProductStore()
-    const product1 = new Product(faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription())
-    const product2 = new Product(faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription())
-    const product3 = new Product(faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription())
+    const product1 = new Product(faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
+    const product2 = new Product(faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
+    const product3 = new Product(faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
     await productStore.save(product1)
     await productStore.save(product2)
     await productStore.save(product3)

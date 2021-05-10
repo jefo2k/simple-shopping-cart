@@ -7,7 +7,7 @@ describe('Add product on catalog tests', () => {
   it('should add product to the catalog', async () => {
     const productStore = new InMemoryProductStore()
     const sut = new AddProductOnCatalog(productStore)
-    const product1 = new Product('1', 'Product 1', 'Product 1 short description')    
+    const product1 = new Product('1', 'Product 1', 'Product 1 short description', 'non valid url')
     
     await sut.add(product1)
     const productList = await productStore.loadAll()
@@ -17,7 +17,7 @@ describe('Add product on catalog tests', () => {
   })
 
   it('should throw an exception when trying to add a product that already exists', async () => {
-    const product = new Product('1', 'Product 1', 'Product 1 short description')
+    const product = new Product('1', 'Product 1', 'Product 1 short description', 'non valid url')
     const productStore = new InMemoryProductStore()
     
     const sut = new AddProductOnCatalog(productStore)
