@@ -10,12 +10,12 @@ export class InMemoryInventoryStore implements InventoryStore {
     this.addCallsCount++
   }
 
-  async loadById (productId: string) {
-    const item = this.inventory.find(p => p.getProductId() === productId)
+  async loadById (tenantId: string, productId: string) {
+    const item = this.inventory.find(p => p.getTenantId() === tenantId && p.getProductId() === productId)
     return item
   }
 
-  async loadAll (): Promise<InventoryItem[]> {
-    return this.inventory
+  async loadAll (tenantId: string): Promise<InventoryItem[]> {
+    return this.inventory.filter(i => i.getTenantId() === tenantId)
   }
 }

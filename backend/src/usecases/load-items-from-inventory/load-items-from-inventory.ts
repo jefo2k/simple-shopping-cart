@@ -7,7 +7,7 @@ export class LoadItemsFromInventory implements LoadInventoryItems {
     private readonly inventoryStore: InventoryStore
   ) {}
   
-  async load(): Promise<InventoryItem[]> {
-    return await this.inventoryStore.loadAll()
+  async load(tenantId: string, ): Promise<InventoryItem[]> {
+    return await this.inventoryStore.loadAll(tenantId)
   }
 }

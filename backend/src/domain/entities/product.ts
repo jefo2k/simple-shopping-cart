@@ -92,7 +92,7 @@ export class Product {
   }
 
   // TODO move to a value object property
-  private readonly isValidUrl = (url: string) => {
+  private isValidUrl(url: string) {
     try {
       new URL(url)
     } catch (e) {

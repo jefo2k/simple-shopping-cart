@@ -25,15 +25,15 @@ describe('Load items from inventory usecase tests', () => {
     await productStore.save(product3)
 
     const inventoryStore = new InMemoryInventoryStore()
-    const item1 = new InventoryItem(product1.getId(), 1 + faker.datatype.number(98))
-    const item2 = new InventoryItem(product2.getId(), 1 + faker.datatype.number(98))
-    const item3 = new InventoryItem(product3.getId(), 1 + faker.datatype.number(98))
+    const item1 = new InventoryItem(TENANT_ID, product1.getId(), 1 + faker.datatype.number(98))
+    const item2 = new InventoryItem(TENANT_ID, product2.getId(), 1 + faker.datatype.number(98))
+    const item3 = new InventoryItem(TENANT_ID, product3.getId(), 1 + faker.datatype.number(98))
     await inventoryStore.save(item1)
     await inventoryStore.save(item2)
     await inventoryStore.save(item3)
 
     const sut = new LoadItemsFromInventory(inventoryStore)
-    const inventoryItemList = await sut.load()
+    const inventoryItemList = await sut.load(TENANT_ID)
 
     expect(inventoryStore.addCallsCount).toBe(3)
     expect(inventoryItemList).toHaveLength(3)
@@ -43,7 +43,7 @@ describe('Load items from inventory usecase tests', () => {
     const inventoryStore = new InMemoryInventoryStore()
     
     const sut = new LoadItemsFromInventory(inventoryStore)
-    const inventoryItemList = await sut.load()
+    const inventoryItemList = await sut.load(TENANT_ID)
 
     expect(inventoryStore.addCallsCount).toBe(0)
     expect(inventoryItemList).toHaveLength(0)

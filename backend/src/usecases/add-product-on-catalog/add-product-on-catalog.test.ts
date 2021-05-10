@@ -13,7 +13,7 @@ describe('Add product on catalog tests', () => {
     const product1 = new Product(TENANT_ID, faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
     
     await sut.add(product1)
-    const productList = await productStore.loadAll()
+    const productList = await productStore.loadAll(TENANT_ID)
 
     expect(productStore.addCallsCount).toBe(1)
     expect(productList).toHaveLength(1)

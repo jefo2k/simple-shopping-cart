@@ -7,7 +7,7 @@ export class LoadProductsFromCatalog implements LoadProducts {
     private readonly productStore: ProductStore
   ) {}
 
-  async load(): Promise<Product[]> {
-    return await this.productStore.loadAll()
+  async load(tenantId: string): Promise<Product[]> {
+    return await this.productStore.loadAll(tenantId)
   }
 }

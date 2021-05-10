@@ -3,7 +3,7 @@ import { makeLoadProductsFromCatalog } from './make-load-products-from-catalog'
 import { LoadProductsFromCatalog } from '../../usecases'
 
 describe('MakeLoadProductsFromCatalog factory tests', () => {
-  it.skip('should receive a use case type', () => {
+  it('should receive a use case type', () => {
     const loadProductFromCatalog: LoadProducts = makeLoadProductsFromCatalog()
 
     expect(loadProductFromCatalog).toBeInstanceOf(LoadProductsFromCatalog)
@@ -11,7 +11,7 @@ describe('MakeLoadProductsFromCatalog factory tests', () => {
 
   it.skip('should have loaded products', async () => {
     const loadProductFromCatalog: LoadProducts = makeLoadProductsFromCatalog()
-    const productList = await loadProductFromCatalog.load()
+    const productList = await loadProductFromCatalog.load('tenantId')
 
     expect(productList).toHaveLength(3)
   })

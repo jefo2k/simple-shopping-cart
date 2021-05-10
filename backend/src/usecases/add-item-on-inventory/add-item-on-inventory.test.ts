@@ -1,7 +1,7 @@
 import { AddItemOnInventory } from '..'
 import { InventoryItem } from '../../domain/entities'
 import { InMemoryInventoryStore } from '../../data/in-memory/in-memory-inventory-store'
-import { InMemoryProductStore } from '../../data/in-memory/in-memory-product-store/in-memory-product-store'
+import { InMemoryProductStore } from '../../data/in-memory/in-memory-product-store'
 import { Product } from '../../domain/entities'
 import * as faker from 'faker'
 
@@ -17,12 +17,12 @@ describe('Add items on an specific Inventory tests', () => {
 
     const sut = new AddItemOnInventory(inventoryStore, productStore)
 
-    const inventoryIem = new InventoryItem(product1.getId(), 20)
+    const inventoryIem = new InventoryItem(TENANT_ID, product1.getId(), 20)
     
     await sut.add(inventoryIem)
 
     expect(inventoryStore.addCallsCount).toBe(1)
-    const productList = await inventoryStore.loadAll()
+    const productList = await inventoryStore.loadAll(TENANT_ID)
 
     expect(inventoryStore.addCallsCount).toBe(1)
     expect(productList).toHaveLength(1)
@@ -33,7 +33,7 @@ describe('Add items on an specific Inventory tests', () => {
     const productStore = new InMemoryProductStore()
     const sut = new AddItemOnInventory(inventoryStore, productStore)
 
-    const inventoryIem = new InventoryItem('id_of_an_inexistent_product', 20)
+    const inventoryIem = new InventoryItem(TENANT_ID, 'id_of_an_inexistent_product', 20)
 
     expect(async () => {
       await sut.add(inventoryIem)
@@ -49,7 +49,7 @@ describe('Add items on an specific Inventory tests', () => {
 
     const sut = new AddItemOnInventory(inventoryStore, productStore)
 
-    const inventoryIem = new InventoryItem(product1.getId(), 20)
+    const inventoryIem = new InventoryItem(TENANT_ID, product1.getId(), 20)
 
     await sut.add(inventoryIem)
 

@@ -11,15 +11,16 @@ export class AddItemOnInventory implements AddInventoryItem {
 
   async add(inventoryItem: InventoryItem): Promise<void> {
     // checks if product exists in catalog
+    const tenantId = inventoryItem.getTenantId()
     const productId = inventoryItem.getProductId()
-    const product = await this.productStore.loadById(productId)
+    const product = await this.productStore.loadById(tenantId, productId)
 
     if (!product) {
       throw new Error('product does not exist')
     }
 
     // checks if an inventory item already exists
-    const item = await this.inventoryStore.loadById(productId)
+    const item = await this.inventoryStore.loadById(tenantId, productId)
     if (item) {
       throw new Error('inventory item already exists')
     }

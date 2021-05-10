@@ -24,7 +24,7 @@ describe('Load products from catalog usecase tests', () => {
     await productStore.save(product3)
 
     const sut = new LoadProductsFromCatalog(productStore)
-    const productList = await sut.load()
+    const productList = await sut.load(TENANT_ID)
 
     expect(productStore.addCallsCount).toBe(3)
     expect(productList).toHaveLength(3)
@@ -34,7 +34,7 @@ describe('Load products from catalog usecase tests', () => {
     const productStore = new InMemoryProductStore()
     
     const sut = new LoadProductsFromCatalog(productStore)
-    const productList = await sut.load()
+    const productList = await sut.load(TENANT_ID)
 
     expect(productStore.addCallsCount).toBe(0)
     expect(productList).toHaveLength(0)
