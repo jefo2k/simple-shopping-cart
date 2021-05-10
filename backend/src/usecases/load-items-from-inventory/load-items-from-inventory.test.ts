@@ -23,9 +23,9 @@ describe('Load items from inventory usecase tests', () => {
     await productStore.save(product3)
 
     const inventoryStore = new InMemoryInventoryStore()
-    const item1 = new InventoryItem(product1.getId(), faker.datatype.number(99))
-    const item2 = new InventoryItem(product2.getId(), faker.datatype.number(99))
-    const item3 = new InventoryItem(product3.getId(), faker.datatype.number(99))
+    const item1 = new InventoryItem(product1.getId(), 1 + faker.datatype.number(98))
+    const item2 = new InventoryItem(product2.getId(), 1 + faker.datatype.number(98))
+    const item3 = new InventoryItem(product3.getId(), 1 + faker.datatype.number(98))
     await inventoryStore.save(item1)
     await inventoryStore.save(item2)
     await inventoryStore.save(item3)

@@ -3,13 +3,14 @@ import { InventoryItem } from '../../domain/entities'
 import { InMemoryInventoryStore } from '../../data/in-memory/in-memory-inventory-store'
 import { InMemoryProductStore } from '../../data/in-memory/in-memory-product-store/in-memory-product-store'
 import { Product } from '../../domain/entities'
+import * as faker from 'faker'
 
 describe('Add items on Inventory tests', () => {
 
   it('should add item into inventory if product exists on catalog', async () => {
     const inventoryStore = new InMemoryInventoryStore()
     const productStore = new InMemoryProductStore()
-    const product1 = new Product('product1', 'Product 1 Name', 'Product 1 description', 'non valid url')
+    const product1 = new Product('product1', faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
     await productStore.save(product1)
 
     const sut = new AddItemOnInventory(inventoryStore, productStore)
@@ -41,7 +42,7 @@ describe('Add items on Inventory tests', () => {
   it('should not add an item if it already exists', async () => {
     const inventoryStore = new InMemoryInventoryStore()
     const productStore = new InMemoryProductStore()
-    const product1 = new Product('product1', 'Product 1 Name', 'Product 1 description', 'non valid url')
+    const product1 = new Product('product1', faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
     await productStore.save(product1)
 
     const sut = new AddItemOnInventory(inventoryStore, productStore)
