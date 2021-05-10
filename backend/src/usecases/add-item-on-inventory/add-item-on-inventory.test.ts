@@ -5,12 +5,14 @@ import { InMemoryProductStore } from '../../data/in-memory/in-memory-product-sto
 import { Product } from '../../domain/entities'
 import * as faker from 'faker'
 
-describe('Add items on Inventory tests', () => {
+const TENANT_ID = faker.datatype.uuid()
+
+describe('Add items on an specific Inventory tests', () => {
 
   it('should add item into inventory if product exists on catalog', async () => {
     const inventoryStore = new InMemoryInventoryStore()
     const productStore = new InMemoryProductStore()
-    const product1 = new Product('product1', faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
+    const product1 = new Product(TENANT_ID, faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
     await productStore.save(product1)
 
     const sut = new AddItemOnInventory(inventoryStore, productStore)
@@ -42,7 +44,7 @@ describe('Add items on Inventory tests', () => {
   it('should not add an item if it already exists', async () => {
     const inventoryStore = new InMemoryInventoryStore()
     const productStore = new InMemoryProductStore()
-    const product1 = new Product('product1', faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
+    const product1 = new Product(TENANT_ID, faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
     await productStore.save(product1)
 
     const sut = new AddItemOnInventory(inventoryStore, productStore)

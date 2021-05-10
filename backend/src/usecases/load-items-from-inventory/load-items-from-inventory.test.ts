@@ -4,6 +4,8 @@ import { InMemoryProductStore } from '../../data/in-memory/in-memory-product-sto
 import * as faker from 'faker'
 import { Product, InventoryItem } from '../../domain/entities'
 
+const TENANT_ID = faker.datatype.uuid()
+
 describe('Load items from inventory usecase tests', () => {
   
   it('should not load inventory on init', () => {
@@ -15,9 +17,9 @@ describe('Load items from inventory usecase tests', () => {
 
   it('should load all items from inventory', async () => {
     const productStore = new InMemoryProductStore()
-    const product1 = new Product(faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
-    const product2 = new Product(faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
-    const product3 = new Product(faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
+    const product1 = new Product(TENANT_ID, faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
+    const product2 = new Product(TENANT_ID, faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
+    const product3 = new Product(TENANT_ID, faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
     await productStore.save(product1)
     await productStore.save(product2)
     await productStore.save(product3)

@@ -3,21 +3,22 @@ import { InMemoryProductStore } from '../../data/in-memory/in-memory-product-sto
 import { Product } from '../../domain/entities'
 import * as faker from 'faker'
 
+const TENANT_ID = faker.datatype.uuid()
+
 describe('Load products from catalog usecase tests', () => {
   
   it('should not load Product on init', () => {
     const productStore = new InMemoryProductStore()
     new LoadProductsFromCatalog(productStore)
 
-    // inventoryManager.add(new Product('product1', 10))
     expect(productStore.addCallsCount).toBe(0)
   })
 
   it('should load all products from catalog', async () => {
     const productStore = new InMemoryProductStore()
-    const product1 = new Product(faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
-    const product2 = new Product(faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
-    const product3 = new Product(faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
+    const product1 = new Product(TENANT_ID, faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
+    const product2 = new Product(TENANT_ID, faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
+    const product3 = new Product(TENANT_ID, faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
     await productStore.save(product1)
     await productStore.save(product2)
     await productStore.save(product3)

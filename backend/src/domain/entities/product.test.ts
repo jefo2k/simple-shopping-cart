@@ -1,46 +1,66 @@
 import { Product } from '.'
 import * as faker from 'faker'
 
+const TENANT_ID = faker.datatype.uuid()
+
 describe('Product entity tests', () => {
+  it('Should not instantiate a product with an empty tenantId', () => {
+    expect(() => {
+      new Product('', faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
+    }).toThrowError('invalid tenantId, must not be empty')
+
+    expect(() => {
+      new Product(' ', faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
+    }).toThrowError('invalid tenantId, must not be empty')
+
+    expect(() => {
+      new Product(undefined, faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
+    }).toThrowError('invalid tenantId, must not be empty')
+
+    expect(() => {
+      new Product(null, faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
+    }).toThrowError('invalid tenantId, must not be empty')
+  })
+
   it('Should not instantiate a product with an empty id', () => {
     expect(() => {
-      new Product('', faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
+      new Product(TENANT_ID, '', faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
     }).toThrowError('invalid id, must not be empty')
 
     expect(() => {
-      new Product(' ', faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
+      new Product(TENANT_ID, ' ', faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
     }).toThrowError('invalid id, must not be empty')
 
     expect(() => {
-      new Product(undefined, faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
+      new Product(TENANT_ID, undefined, faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
     }).toThrowError('invalid id, must not be empty')
 
     expect(() => {
-      new Product(null, faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
+      new Product(TENANT_ID, null, faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
     }).toThrowError('invalid id, must not be empty')
   })
 
   it('Should not instantiate a product with an empty name', () => {
     expect(() => {
-      new Product(faker.datatype.uuid(), '', faker.commerce.productDescription(), faker.image.imageUrl())
+      new Product(TENANT_ID, faker.datatype.uuid(), '', faker.commerce.productDescription(), faker.image.imageUrl())
     }).toThrowError('invalid name, must not be empty')
 
     expect(() => {
-      new Product(faker.datatype.uuid(), ' ', faker.commerce.productDescription(), faker.image.imageUrl())
+      new Product(TENANT_ID, faker.datatype.uuid(), ' ', faker.commerce.productDescription(), faker.image.imageUrl())
     }).toThrowError('invalid name, must not be empty')
 
     expect(() => {
-      new Product(faker.datatype.uuid(), undefined, faker.commerce.productDescription(), faker.image.imageUrl())
+      new Product(TENANT_ID, faker.datatype.uuid(), undefined, faker.commerce.productDescription(), faker.image.imageUrl())
     }).toThrowError('invalid name, must not be empty')
 
     expect(() => {
-      new Product(faker.datatype.uuid(), null, faker.commerce.productDescription(), faker.image.imageUrl())
+      new Product(TENANT_ID, faker.datatype.uuid(), null, faker.commerce.productDescription(), faker.image.imageUrl())
     }).toThrowError('invalid name, must not be empty')
   })
 
   it('Should not instantiate a product with name length greater than 60', () => {
     expect(() => {
-      new Product(
+      new Product(TENANT_ID, 
         faker.datatype.uuid(), 
         '1234567890123456789012345678901234567890123456789012345678901',
         faker.commerce.productName(),
@@ -51,25 +71,25 @@ describe('Product entity tests', () => {
 
   it('Should not instantiate a product with an empty description', () => {
     expect(() => {
-      new Product(faker.datatype.uuid(), faker.commerce.productName(), '', faker.image.imageUrl())
+      new Product(TENANT_ID, faker.datatype.uuid(), faker.commerce.productName(), '', faker.image.imageUrl())
     }).toThrowError('invalid description, must not be empty')
 
     expect(() => {
-      new Product(faker.datatype.uuid(), faker.commerce.productName(), ' ', faker.image.imageUrl())
+      new Product(TENANT_ID, faker.datatype.uuid(), faker.commerce.productName(), ' ', faker.image.imageUrl())
     }).toThrowError('invalid description, must not be empty')
 
     expect(() => {
-      new Product(faker.datatype.uuid(), faker.commerce.productName(), undefined, faker.image.imageUrl())
+      new Product(TENANT_ID, faker.datatype.uuid(), faker.commerce.productName(), undefined, faker.image.imageUrl())
     }).toThrowError('invalid description, must not be empty')
 
     expect(() => {
-      new Product(faker.datatype.uuid(), faker.commerce.productName(), null, faker.image.imageUrl())
+      new Product(TENANT_ID, faker.datatype.uuid(), faker.commerce.productName(), null, faker.image.imageUrl())
     }).toThrowError('invalid description, must not be empty')
   })
 
   it('Should not instantiate a product with description length greater than 255', () => {
     expect(() => {
-      new Product(
+      new Product(TENANT_ID, 
         faker.datatype.uuid(), 
         faker.commerce.productName(),
         `12345678901234567890123456789012345678901234567890\
@@ -85,25 +105,25 @@ describe('Product entity tests', () => {
 
   it('Should not instantiate a product with an empty thumbUrl', () => {
     expect(() => {
-      new Product(faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), '')
+      new Product(TENANT_ID, faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), '')
     }).toThrowError('invalid thumb Url, must not be empty')
 
     expect(() => {
-      new Product(faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), ' ')
+      new Product(TENANT_ID, faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), ' ')
     }).toThrowError('invalid thumb Url, must not be empty')
 
     expect(() => {
-      new Product(faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), undefined)
+      new Product(TENANT_ID, faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), undefined)
     }).toThrowError('invalid thumb Url, must not be empty')
 
     expect(() => {
-      new Product(faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), null)
+      new Product(TENANT_ID, faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), null)
     }).toThrowError('invalid thumb Url, must not be empty')
   })
 
   it('Should not instantiate a product with a invalid thumbUrl', () => {
     expect(() => {
-      new Product(
+      new Product(TENANT_ID, 
         faker.datatype.uuid(), 
         faker.commerce.productName(),
         faker.commerce.productDescription(), 
@@ -116,7 +136,7 @@ describe('Product entity tests', () => {
   const productName = faker.commerce.productName()
   const productDescription = faker.commerce.productDescription()
   const productThumbUrl = faker.image.imageUrl()
-  const product = new Product(productId, productName, productDescription, productThumbUrl)
+  const product = new Product(TENANT_ID, productId, productName, productDescription, productThumbUrl)
 
   it('Smoking test: Mandatory fields getters must return correct values', () => {
     expect(product.getId()).toBe(productId)

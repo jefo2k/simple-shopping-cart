@@ -2,6 +2,7 @@ import { URL } from "url"
 
 export class Product {
 
+  private tenantId: string
   private id: string
   private name: string
   private description: string
@@ -9,9 +10,10 @@ export class Product {
   private createdAt: Date
   private updatedAt: Date
 
-  constructor(id: string, name: string, description: string, thumbUrl: string) {
-    this.validateParams(id, name, description, thumbUrl)
+  constructor(tenantId: string, id: string, name: string, description: string, thumbUrl: string) {
+    this.validateParams(tenantId, id, name, description, thumbUrl)
 
+    this.tenantId = tenantId
     this.id = id
     this.name = name
     this.description = description
@@ -74,7 +76,8 @@ export class Product {
     this.updatedAt = new Date()
   }
 
-  private validateParams(id: string, name: string, description: string, thumbUrl: string): void {
+  private validateParams(tenantId: string, id: string, name: string, description: string, thumbUrl: string): void {
+    if (!tenantId || tenantId.trim().length < 1 ) throw new Error('invalid tenantId, must not be empty')
     if (!id || id.trim().length < 1 ) throw new Error('invalid id, must not be empty')
     if (!name || name.trim().length < 1) throw new Error('invalid name, must not be empty')
     if (name.length > 60) throw new Error('invalid name, has more than 60 chars')
@@ -84,6 +87,7 @@ export class Product {
     if (!this.isValidUrl(thumbUrl)) throw new Error('invalid thumb Url, not a valid url')
   }
 
+  // TODO move to a value object property
   private readonly isValidUrl = (url: string) => {
     try {
       new URL(url)
