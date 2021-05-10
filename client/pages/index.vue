@@ -1,40 +1,65 @@
 <template>
-  <div class="container">
+  <div class="content">
     <div>
-      <Logo />
       <h1 class="title">
-        simple-shopping-cart-client
+        Products
       </h1>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          GitHub
-        </a>
+      <div class="products">
+        <a-card hoverable class="product" v-for="product in productList" :key="product.id">
+          <img
+            slot="cover"
+            alt="example"
+            src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+          />
+          <template slot="actions" class="ant-card-actions">
+            <a-button type="primary" icon="plus-circle" size="large" style="width: 240px;" @click="addToCart(product.id, 1)">
+              Add to cart
+            </a-button>
+            <!-- <a-icon type="shopping-cart" :style="{ fontSize: '22px' }" />
+            <a-icon type="plus-circle" /> -->
+          </template>
+          <a-card-meta :title="product.name" :description="product.description" />
+        </a-card>
+      </div>
+      <div>
+        :: {{ shoppingCart }}
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+
+export default {
+  async asyncData ({ $axios }) {
+    const response = await $axios.get('/products')
+    const productList = response.data.items
+
+    return {
+      productList
+    }
+  },
+  data () {
+    return {
+    }
+  },
+  computed: {
+    shoppingCart() {
+      return this.$store.state.cart.items
+    }
+  },
+  methods: {
+    addToCart(productId, quantity) {
+      this.$store.commit('cart/add', { productId, quantity })
+    },
+  }
+}
 </script>
 
 <style>
-.container {
+.content {
   margin: 0 auto;
-  min-height: 100vh;
+  /* min-height: 100vh; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -54,7 +79,7 @@ export default {}
     sans-serif;
   display: block;
   font-weight: 300;
-  font-size: 100px;
+  font-size: 72px;
   color: #35495e;
   letter-spacing: 1px;
 }
@@ -67,7 +92,14 @@ export default {}
   padding-bottom: 15px;
 }
 
-.links {
-  padding-top: 15px;
+.products {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.product {
+  margin: 10px;
+  max-width: 300px;
 }
 </style>
