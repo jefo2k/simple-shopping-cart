@@ -3,18 +3,18 @@ import { URL } from "url"
 export class Product {
 
   private tenantId: string
-  private id: string
+  private productId: string
   private name: string
   private description: string
   private thumbUrl: string
   private createdAt: Date
   private updatedAt: Date
 
-  constructor(tenantId: string, id: string, name: string, description: string, thumbUrl: string) {
-    this.validateParams(tenantId, id, name, description, thumbUrl)
+  constructor(tenantId: string, productId: string, name: string, description: string, thumbUrl: string) {
+    this.validateParams(tenantId, productId, name, description, thumbUrl)
 
     this.tenantId = tenantId
-    this.id = id
+    this.productId = productId
     this.name = name
     this.description = description
     this.thumbUrl = thumbUrl
@@ -31,8 +31,8 @@ export class Product {
     return this.tenantId
   }
 
-  public getId() {
-    return this.id
+  public getProductId() {
+    return this.productId
   }
 
   public getName() {
@@ -80,9 +80,9 @@ export class Product {
     this.updatedAt = new Date()
   }
 
-  private validateParams(tenantId: string, id: string, name: string, description: string, thumbUrl: string): void {
+  private validateParams(tenantId: string, productId: string, name: string, description: string, thumbUrl: string): void {
     if (!tenantId || tenantId.trim().length < 1 ) throw new Error('invalid tenantId, must not be empty')
-    if (!id || id.trim().length < 1 ) throw new Error('invalid id, must not be empty')
+    if (!productId || productId.trim().length < 1 ) throw new Error('invalid productId, must not be empty')
     if (!name || name.trim().length < 1) throw new Error('invalid name, must not be empty')
     if (name.length > 60) throw new Error('invalid name, has more than 60 chars')
     if (!description || description.trim().length < 1) throw new Error('invalid description, must not be empty')

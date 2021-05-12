@@ -17,7 +17,7 @@ describe('Add items on an specific Inventory tests', () => {
 
     const sut = new AddItemOnInventory(inventoryStore, productStore)
 
-    const inventoryIem = new InventoryItem(TENANT_ID, product1.getId(), 20)
+    const inventoryIem = new InventoryItem(TENANT_ID, product1.getProductId(), 20)
     
     await sut.add(inventoryIem)
 
@@ -49,7 +49,7 @@ describe('Add items on an specific Inventory tests', () => {
 
     const sut = new AddItemOnInventory(inventoryStore, productStore)
 
-    const inventoryIem = new InventoryItem(TENANT_ID, product1.getId(), 20)
+    const inventoryIem = new InventoryItem(TENANT_ID, product1.getProductId(), 20)
 
     await sut.add(inventoryIem)
 

@@ -25,19 +25,19 @@ describe('Product entity tests', () => {
   it('Should not instantiate a product with an empty id', () => {
     expect(() => {
       new Product(TENANT_ID, '', faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
-    }).toThrowError('invalid id, must not be empty')
+    }).toThrowError('invalid productId, must not be empty')
 
     expect(() => {
       new Product(TENANT_ID, ' ', faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
-    }).toThrowError('invalid id, must not be empty')
+    }).toThrowError('invalid productId, must not be empty')
 
     expect(() => {
       new Product(TENANT_ID, undefined, faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
-    }).toThrowError('invalid id, must not be empty')
+    }).toThrowError('invalid productId, must not be empty')
 
     expect(() => {
       new Product(TENANT_ID, null, faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
-    }).toThrowError('invalid id, must not be empty')
+    }).toThrowError('invalid productId, must not be empty')
   })
 
   it('Should not instantiate a product with an empty name', () => {
@@ -143,7 +143,7 @@ describe('Product entity tests', () => {
 
   it('Smoking test: Mandatory fields getters must return correct values', () => {
     expect(product.getTenantId()).toBe(TENANT_ID)
-    expect(product.getId()).toBe(productId)
+    expect(product.getProductId()).toBe(productId)
     expect(product.getName()).toBe(productName)
     expect(product.getDescription()).toBe(productDescription)
     expect(product.getThumbUrl()).toBe(productThumbUrl)

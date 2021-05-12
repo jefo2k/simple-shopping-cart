@@ -11,7 +11,7 @@ export class InMemoryProductStore implements ProductStore {
   }
   
   async loadById (tenantId: string, productId: string) {
-    const product = this.catalog.find(p => p.getTenantId() === tenantId && p.getId() === productId)
+    const product = this.catalog.find(p => p.getTenantId() === tenantId && p.getProductId() === productId)
     return product
   }
   
