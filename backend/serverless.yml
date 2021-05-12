@@ -34,7 +34,7 @@ functions:
     events:
       - http:
           method: get
-          path: products
+          path: tenant/{tenantId}/products
           cors: true
     iamRoleStatements:
       - Effect: Allow

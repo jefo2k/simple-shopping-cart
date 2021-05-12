@@ -5,15 +5,21 @@ import { makeLoadProductsFromCatalog } from '../../main/factories/make-load-prod
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const loadProductFromCatalog: LoadProducts = makeLoadProductsFromCatalog()
-  const productList = await loadProductFromCatalog.load()
+  const tenantId = event.pathParameters.tenantId
 
-  return {
-    statusCode: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*'
-    },
-    body: JSON.stringify({
-      items: productList
-    }, null, 2)
+  try {
+    const productList = await loadProductFromCatalog.load(tenantId)
+  
+    return {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*'
+      },
+      body: JSON.stringify({
+        items: productList
+      }, null, 2)
+    }
+  } catch (error) {
+    throw new Error(error)
   }
 }
