@@ -8,11 +8,11 @@
         <a-card hoverable class="product" v-for="product in productList" :key="product.id">
           <img
             slot="cover"
-            alt="example"
-            src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+            :alt="product.name"
+            :src="product.thumbUrl"
           />
           <template slot="actions" class="ant-card-actions">
-            <a-button type="primary" icon="plus-circle" size="large" style="width: 240px;" @click="addToCart(product.id, 1)">
+            <a-button type="primary" icon="plus-circle" size="large" style="width: 275px;" @click="addToCart(product.id, 1)">
               Add to cart
             </a-button>
             <!-- <a-icon type="shopping-cart" :style="{ fontSize: '22px' }" />
