@@ -12,19 +12,66 @@ custom:
 # Add the serverless-webpack plugin
 plugins:
   - serverless-webpack
+  - serverless-iam-roles-per-function
 
 provider:
   name: aws
   runtime: nodejs12.x
+
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-2'}
+
   apiGateway:
     minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+    PRODUCTS_TABLE: products-${self:provider.stage}
+    PRODUCTS_INDEX_NAME: products-index
 
 functions:
-  hello:
-    handler: handler.hello
+  loadProducts:
+    handler: src/lambda/http/load-products.handler
     events:
       - http:
           method: get
-          path: hello
+          path: tenant/{tenantId}/products
+          cors: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}/index/${self:provider.environment.PRODUCTS_INDEX_NAME}
+
+resources:
+  Resources:
+
+    ProductsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: tenantId
+            AttributeType: S
+          - AttributeName: productId
+            AttributeType: S
+          - AttributeName: createdAt
+            AttributeType: S
+        KeySchema:
+          - AttributeName: tenantId
+            KeyType: HASH
+          - AttributeName: productId
+            KeyType: RANGE
+        LocalSecondaryIndexes:
+          - IndexName: ${self:provider.environment.PRODUCTS_INDEX_NAME}
+            KeySchema:
+              - AttributeName: tenantId
+                KeyType: HASH
+              - AttributeName: createdAt
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL # What attributes will be copied to an index
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.PRODUCTS_TABLE}
