@@ -8,18 +8,25 @@ import { ProductStore } from '../../ports/product-store'
 export class DynamodbProductStore implements ProductStore {
   constructor(
     private readonly docClient: DocumentClient = new AWS.DynamoDB.DocumentClient(),
-    private readonly productsTable = process.env.PRODUCTS_TABLE
+    private readonly productsTable = process.env.PRODUCTS_TABLE,
+    private readonly productsIndex = process.env.PRODUCTS_INDEX_NAME
   ) {}
 
   save: (product: Product) => Promise<void>
-  loadById: (productId: string) => Promise<Product>
-  
-  async loadAll (): Promise<Product[]> {
-    const result = await this.docClient.scan({
-      TableName: this.productsTable
+  loadById: (tenantId: string, productId: string) => Promise<Product>
+
+  async loadAll (tenantId: string): Promise<Product[]> {
+    const result = await this.docClient.query({
+      TableName: this.productsTable,
+      IndexName: this.productsIndex,
+      KeyConditionExpression: 'tenantId = :tenantId',
+      ExpressionAttributeValues: {
+        ':tenantId': tenantId
+      }
     }).promise()
 
     const productList = result.Items
     return productList as Product[]
   }
+  
 }
