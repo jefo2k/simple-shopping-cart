@@ -15,7 +15,7 @@
           Sign in
         </a-button> 
         -->
-      <a-badge :count="itemsQuantity" :offset="[-17,9]" style="width: 46px;">
+      <a-badge :count="itemsQuantity" :offset="[-17,11]" style="width: 46px;">
         <a href="#">
           <a-icon type="shopping-cart" :style="{ fontSize: '22px' }" />
         </a>
