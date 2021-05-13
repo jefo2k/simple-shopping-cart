@@ -82,6 +82,7 @@ export default {
   font-size: 72px;
   color: #35495e;
   letter-spacing: 1px;
+  padding-top: 25px;
 }
 
 .subtitle {
