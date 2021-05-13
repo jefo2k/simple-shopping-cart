@@ -22,7 +22,6 @@
         </a-card>
       </div>
       <div>
-        :: {{ shoppingCart }}
       </div>
     </div>
   </div>
@@ -79,7 +78,7 @@ export default {
     sans-serif;
   display: block;
   font-weight: 300;
-  font-size: 72px;
+  font-size: 70px;
   color: #35495e;
   letter-spacing: 1px;
   padding-top: 25px;

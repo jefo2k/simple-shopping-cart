@@ -1,15 +1,15 @@
 <template>
-  <div>
-    <Header/>
-    <a-layout>
-      <a-layout-content>
-        <Nuxt />
-      </a-layout-content>
-      <a-layout-footer>
-        <Footer/>
-      </a-layout-footer>
-    </a-layout>
-  </div>
+  <a-layout>
+    <a-layout-header :style="{ position: 'fixed', zIndex: 1, width: '100%', background: '#D2EAFF', height: '65px' }">
+      <Header/>
+    </a-layout-header>
+    <a-layout-content :style="{ padding: '0px 50px', marginTop: '65px' }">
+      <Nuxt />
+    </a-layout-content>
+    <a-layout-footer>
+      <Footer/>
+    </a-layout-footer>
+  </a-layout>
 </template>
 
 <script>
