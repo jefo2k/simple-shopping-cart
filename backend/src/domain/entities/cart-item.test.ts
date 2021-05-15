@@ -43,10 +43,27 @@ describe('Cart item entity tests', () => {
   it('Smoking test: Mandatory fields getters must return correct values and quantity must be updated successfully', () => {
     const productId = faker.datatype.uuid()
     const item = new CartItem(TENANT_ID, CART_ID, productId, 1)
+    
+    expect(item.getTenantId()).toBe(TENANT_ID)
+    expect(item.getCartId()).toBe(CART_ID)
     expect(item.getProductId()).toBe(productId)
     expect(item.getQuantity()).toBe(1)
 
     item.setQuantity(22)  
     expect(item.getQuantity()).toBe(22)
+  })
+
+  it('Update cart quantity must update updatedAt field', async () => {
+    const productId = faker.datatype.uuid()
+    const item = new CartItem(TENANT_ID, CART_ID, productId, 1)
+
+    const cartItemUpdatedAtBeforeChange = item.getUpdatedAt()
+    // waits for 100 miliseconds
+    await new Promise((r) => setTimeout(r, 100))
+    item.setQuantity(2)
+    const cartItemUpdatedAtAfterChange = item.getUpdatedAt()
+
+    expect(cartItemUpdatedAtBeforeChange.getTime()).not.toBe(cartItemUpdatedAtAfterChange.getTime())
+    expect(cartItemUpdatedAtBeforeChange.getTime()).toBeLessThan(cartItemUpdatedAtAfterChange.getTime())
   })
 })
