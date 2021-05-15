@@ -1,10 +1,8 @@
-import { Product } from '../../../domain/entities'
+import { Product, InventoryItem } from '../../../domain/entities'
+import { AddProductOnCatalog, AddItemOnInventory, LoadProductsFromCatalog } from '../../../usecases'
 import { InMemoryProductStore } from '../in-memory-product-store'
-import { AddProductOnCatalog } from '../../../usecases'
+import { InMemoryInventoryStore } from './in-memory-inventory-store'
 import * as faker from 'faker'
-import { InMemoryInventoryStore } from './in-memory-inventory-store';
-import { AddItemOnInventory } from '../../../usecases/add-item-on-inventory/add-item-on-inventory';
-import { InventoryItem } from '../../../domain/entities/inventory-item';
 
 const TENANT_ID = faker.datatype.uuid()
 const TENANT_ID_2 = faker.datatype.uuid()
@@ -13,8 +11,12 @@ describe('In Memory Inventory Store tests', () => {
   it('should add inventory items to and load from different inventories (tenants)', async () => {
     const productStore = new InMemoryProductStore()
     const addProductInCatalogUC = new AddProductOnCatalog(productStore)
+
+    const loadProductsFromCatalogUc = new LoadProductsFromCatalog(productStore)
+    
     const sut = new InMemoryInventoryStore()
-    const addInventoryItemInCatalogUC = new AddItemOnInventory(sut, productStore)
+
+    const addInventoryItemInCatalogUC = new AddItemOnInventory(sut, loadProductsFromCatalogUc)
 
     const product1 = new Product(TENANT_ID, faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
     const product2 = new Product(TENANT_ID, faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
