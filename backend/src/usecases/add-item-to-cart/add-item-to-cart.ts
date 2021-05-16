@@ -22,7 +22,9 @@ export class AddItemToCart implements AddCartItem {
       // check if product is available
       await this.checkAvailability(tenantId, productId, quantity)
 
-      const cartItemFound = await this.getCartItemByProductID(tenantId, cartId, productId)
+      console.log('### main checks passed...')
+      // const cartItemFound = await this.getCartItemByProductID(tenantId, cartId, productId)
+      const cartItemFound = await this.cartStore.loadByProductId(cartId, productId)
 
       if (!cartItemFound) {
         const cartItem = new CartItem(tenantId, cartId, productId, quantity)
@@ -45,11 +47,14 @@ export class AddItemToCart implements AddCartItem {
     } 
   }
 
-  private async getCartItemByProductID(tenantId: string, cartId: string, productId: string) {
-    const cartItems = await this.cartStore.loadAll(tenantId, cartId)
+  // private async getCartItemByProductID(tenantId: string, cartId: string, productId: string) {
+  //   console.log('### before load all cartItems...')
+  //   const cartItems = await this.cartStore.loadAll(tenantId, cartId)
+  //   console.log('### after load all cartItems: ', cartItems)
 
-    const cartItem = cartItems.find(c => c.getProductId() === productId)
-    return cartItem
-  }
+  //   console.log(`### before find cartItem with productId ${productId}...`)
+  //   const cartItem = cartItems.find(c => c.getProductId() === productId)
+  //   return cartItem
+  // }
   
 }

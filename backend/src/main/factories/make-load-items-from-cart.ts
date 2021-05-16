@@ -1,9 +1,8 @@
-import { InMemoryCartStore } from '../../data/in-memory/in-memory-cart-store'
 import { LoadItemsFromCart } from '../../usecases'
+import { DynamodbCartStore } from '../../data/dynamodb/dynamodb-cart-store'
 
 export const makeLoadItemsFromCart = (): LoadItemsFromCart => {
-  //const cartStore = new DynamodbCartStore()
-  const cartStore = new InMemoryCartStore()
+  const cartStore = new DynamodbCartStore()
   
   const loadItemsFromCart = new LoadItemsFromCart(cartStore)
 

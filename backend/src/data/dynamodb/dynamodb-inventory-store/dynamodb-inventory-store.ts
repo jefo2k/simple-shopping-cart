@@ -3,7 +3,6 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { InventoryItem } from '../../../domain/entities'
 import { InventoryStore } from '../../ports'
 
-
 export class DynamodbInventoryStore implements InventoryStore {
   constructor(
     private readonly docClient: DocumentClient = new AWS.DynamoDB.DocumentClient(),
@@ -23,8 +22,6 @@ export class DynamodbInventoryStore implements InventoryStore {
         ':productId': productId
       }
     }).promise()
-
-    console.info('### result.Items: ', result.Items)
 
     const response = result.Items[0]
     // return productList[0] as InventoryItem
