@@ -1,8 +1,7 @@
 import * as AWS  from 'aws-sdk'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
-
 import { Product } from '../../../domain/entities'
-import { ProductStore } from '../../ports/product-store'
+import { ProductStore } from '../../ports'
 
 
 export class DynamodbProductStore implements ProductStore {
@@ -12,8 +11,24 @@ export class DynamodbProductStore implements ProductStore {
     private readonly productsIndex = process.env.PRODUCTS_INDEX_NAME
   ) {}
 
-  save: (product: Product) => Promise<void>
-  loadById: (tenantId: string, productId: string) => Promise<Product>
+  save: (product: Product) => Promise<string>
+  
+  async loadById (tenantId: string, productId: string): Promise<Product> {
+    const result = await this.docClient.query({
+      TableName: this.productsTable,
+      IndexName: this.productsIndex,
+      KeyConditionExpression: 'tenantId = :tenantId and productId = :productId',
+      ExpressionAttributeValues: {
+        ':tenantId': tenantId,
+        ':productId': productId
+      }
+    }).promise()
+
+    console.info('result.Items: ', result.Items)
+
+    const productList = result.Items
+    return productList[0] as Product
+  }
 
   async loadAll (tenantId: string): Promise<Product[]> {
     const result = await this.docClient.query({

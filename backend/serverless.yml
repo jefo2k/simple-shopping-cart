@@ -27,6 +27,8 @@ provider:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
     PRODUCTS_TABLE: products-${self:provider.stage}
     PRODUCTS_INDEX_NAME: products-index
+    INVENTORY_TABLE: inventory-${self:provider.stage}
+    # INVENTORY_INDEX_NAME: inventory-index
 
 functions:
   loadProducts:
@@ -46,6 +48,27 @@ functions:
           - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}/index/${self:provider.environment.PRODUCTS_INDEX_NAME}
 
+  addToCart:
+    handler: src/lambda/http/add-to-cart.handler
+    events:
+      - http:
+          method: post
+          path: tenant/{tenantId}/cart
+          cors: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}/index/${self:provider.environment.PRODUCTS_INDEX_NAME}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.INVENTORY_TABLE}
+
 resources:
   Resources:
 
@@ -57,8 +80,6 @@ resources:
             AttributeType: S
           - AttributeName: productId
             AttributeType: S
-          - AttributeName: createdAt
-            AttributeType: S
         KeySchema:
           - AttributeName: tenantId
             KeyType: HASH
@@ -69,9 +90,34 @@ resources:
             KeySchema:
               - AttributeName: tenantId
                 KeyType: HASH
-              - AttributeName: createdAt
+              - AttributeName: productId
                 KeyType: RANGE
             Projection:
               ProjectionType: ALL # What attributes will be copied to an index
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.PRODUCTS_TABLE}
+
+    InventoryTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: tenantId
+            AttributeType: S
+          - AttributeName: productId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: tenantId
+            KeyType: HASH
+          - AttributeName: productId
+            KeyType: RANGE
+        # LocalSecondaryIndexes:
+        #   - IndexName: ${self:provider.environment.INVENTORY_INDEX_NAME}
+        #     KeySchema:
+        #       - AttributeName: tenantId
+        #         KeyType: HASH
+        #       - AttributeName: productId
+        #         KeyType: RANGE
+        #     Projection:
+        #       ProjectionType: ALL # What attributes will be copied to an index
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.INVENTORY_TABLE}

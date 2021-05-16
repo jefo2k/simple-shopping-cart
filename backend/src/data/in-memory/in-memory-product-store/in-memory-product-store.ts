@@ -5,9 +5,10 @@ export class InMemoryProductStore implements ProductStore {
   addCallsCount = 0
   private catalog: Array<Product> = []
   
-  async save (product: Product): Promise<void> {
-    this.catalog.push(product)
+  async save (product: Product): Promise<string> {
     this.addCallsCount++
+    this.catalog.push(product)
+    return product.getProductId()
   }
   
   async loadById (tenantId: string, productId: string) {

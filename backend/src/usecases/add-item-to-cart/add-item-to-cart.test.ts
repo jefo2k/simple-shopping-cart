@@ -1,8 +1,9 @@
 import { AddItemToCart, AddItemOnInventory, LoadItemsFromInventory, AddProductOnCatalog, LoadProductsFromCatalog } from '..'
-import { CartItem, Product, InventoryItem } from '../../domain/entities'
+import { Product, InventoryItem } from '../../domain/entities'
 import { InMemoryCartStore } from '../../data/in-memory/in-memory-cart-store'
 import { InMemoryInventoryStore } from '../../data/in-memory/in-memory-inventory-store'
 import { InMemoryProductStore } from '../../data/in-memory/in-memory-product-store'
+import { AddToCartDto } from '../../dtos'
 import * as faker from 'faker'
 
 const TENANT_ID = faker.datatype.uuid()
@@ -22,15 +23,29 @@ describe('Add items on an specific Cart tests', () => {
 
     const sut = new AddItemToCart(cartStore, loadItemsFromInventoryUc, loadProductsFromCatalogUc)
 
-    const product1 = new Product(TENANT_ID, faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
+    const product1Id = faker.datatype.uuid()
+    const product1 = new Product(TENANT_ID, product1Id, faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
     await addProductOnCatalogUc.add(product1)
 
     const inventoryItem1 = new InventoryItem(TENANT_ID, product1.getProductId(), 2)
     await addItemOnInventoryUc.add(inventoryItem1)
 
-    const cartItem = new CartItem(TENANT_ID, CART_ID, product1.getProductId(), 1)
-    await sut.add(cartItem)
-    expect(cartStore.addCallsCount).toBe(1)
+    // with no cartId
+    const cartItemDto1: AddToCartDto = {
+      productId: product1Id,
+      quantity: 1
+    }
+    await sut.add(cartItemDto1, TENANT_ID)
+
+    // with cartId
+    const cartItemDto2: AddToCartDto = {
+      cartId: CART_ID,
+      productId: product1Id,
+      quantity: 2
+    }
+    await sut.add(cartItemDto2, TENANT_ID)
+
+    expect(cartStore.addCallsCount).toBe(2)
     
     const cartList = await cartStore.loadAll(TENANT_ID, CART_ID)
     expect(cartList).toHaveLength(1)
@@ -46,9 +61,13 @@ describe('Add items on an specific Cart tests', () => {
 
     const sut = new AddItemToCart(cartStore, loadItemsFromInventoryUc, loadProductsFromCatalogUc)
 
-    const cartItem = new CartItem(TENANT_ID, CART_ID, faker.datatype.uuid(), 2)
+    const cartItemDto1: AddToCartDto = {
+      cartId: CART_ID,
+      productId: faker.datatype.uuid(),
+      quantity: 2
+    }
     expect(async () => {
-      await sut.add(cartItem)
+      await sut.add(cartItemDto1, TENANT_ID)
     }).rejects.toThrowError('product does not exist')
   })
 
@@ -63,12 +82,17 @@ describe('Add items on an specific Cart tests', () => {
 
     const sut = new AddItemToCart(cartStore, loadItemsFromInventoryUc, loadProductsFromCatalogUc)
 
-    const product1 = new Product(TENANT_ID, faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
+    const product1Id = faker.datatype.uuid()
+    const product1 = new Product(TENANT_ID, product1Id, faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
     await addProductOnCatalogUc.add(product1)
 
-    const cartItem = new CartItem(TENANT_ID, CART_ID, product1.getProductId(), 2)
+    const cartItemDto1: AddToCartDto = {
+      cartId: CART_ID,
+      productId: product1Id,
+      quantity: 2
+    }
     expect(async () => {
-      await sut.add(cartItem)
+      await sut.add(cartItemDto1, TENANT_ID)
     }).rejects.toThrowError('product unavailable')
   })
 
@@ -84,15 +108,20 @@ describe('Add items on an specific Cart tests', () => {
 
     const sut = new AddItemToCart(cartStore, loadItemsFromInventoryUc, loadProductsFromCatalogUc)
 
-    const product1 = new Product(TENANT_ID, faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
+    const product1Id = faker.datatype.uuid()
+    const product1 = new Product(TENANT_ID, product1Id, faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
     await addProductOnCatalogUc.add(product1)
 
     const inventoryItem1 = new InventoryItem(TENANT_ID, product1.getProductId(), 1)
     await addItemOnInventoryUc.add(inventoryItem1)
 
-    const cartItem = new CartItem(TENANT_ID, CART_ID, product1.getProductId(), 2)
+    const cartItemDto1: AddToCartDto = {
+      cartId: CART_ID,
+      productId: product1Id,
+      quantity: 2
+    }
     expect(async () => {
-      await sut.add(cartItem)
+      await sut.add(cartItemDto1, TENANT_ID)
     }).rejects.toThrowError('product out of stock')
   })
 
@@ -108,15 +137,20 @@ describe('Add items on an specific Cart tests', () => {
     
     const sut = new AddItemToCart(cartStore, loadItemsFromInventoryUc, loadProductsFromCatalogUc)
 
-    const product1 = new Product(TENANT_ID, faker.datatype.uuid(), faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
+    const product1Id = faker.datatype.uuid()
+    const product1 = new Product(TENANT_ID, product1Id, faker.commerce.productName(), faker.commerce.productDescription(), faker.image.imageUrl())
     await addProductOnCatalogUc.add(product1)
 
     const inventoryItem1 = new InventoryItem(TENANT_ID, product1.getProductId(), 2)
     await addItemOnInventoryUc.add(inventoryItem1)
 
-    const cartItem = new CartItem(TENANT_ID, CART_ID, product1.getProductId(), 1)
-    await sut.add(cartItem)
-    await sut.add(cartItem)
+    const cartItemDto1: AddToCartDto = {
+      cartId: CART_ID,
+      productId: product1Id,
+      quantity: 1
+    }
+    await sut.add(cartItemDto1, TENANT_ID)
+    await sut.add(cartItemDto1, TENANT_ID)
     expect(cartStore.addCallsCount).toBe(1)
     expect(cartStore.updateCallsCount).toBe(1)
     

@@ -1,6 +1,8 @@
 import { CartItem } from '../../domain/entities'
 import { AddCartItem, LoadInventoryItems, LoadProducts } from '../ports'
 import { CartStore } from '../../data/ports'
+import { AddToCartDto } from '../../dtos'
+import * as uuid from 'uuid'
 
 export class AddItemToCart implements AddCartItem {
   constructor(
@@ -9,20 +11,25 @@ export class AddItemToCart implements AddCartItem {
     private readonly loadProductsUc: LoadProducts
   ) {}
 
-  async add(cartItem: CartItem): Promise<void> {
+  async add(addToCartDto: AddToCartDto, tenantId: string): Promise<string> {
+    const { cartId = uuid.v4(), productId, quantity } = addToCartDto
     
     try {
-      await this.loadProductsUc.loadById(cartItem.getTenantId(), cartItem.getProductId())
-      await this.loadInventoryItemsUc.loadById(cartItem.getTenantId(), cartItem.getProductId())
-      await this.checkAvailability(cartItem.getTenantId(), cartItem.getProductId(), cartItem.getQuantity())
+      // checks if product exists
+      await this.loadProductsUc.loadById(tenantId, productId)
+      // checks if product is in inventory
+      await this.loadInventoryItemsUc.loadById(tenantId, productId)
+      // check if product is available
+      await this.checkAvailability(tenantId, productId, quantity)
 
-      const cartItemFound = await this.getCartItemByProductID(cartItem.getTenantId(), cartItem.getCartId(), cartItem.getProductId())
+      const cartItemFound = await this.getCartItemByProductID(tenantId, cartId, productId)
 
-      if(!cartItemFound) {
-        await this.cartStore.save(cartItem)
+      if (!cartItemFound) {
+        const cartItem = new CartItem(tenantId, cartId, productId, quantity)
+        return await this.cartStore.save(cartItem)
       } else {
-        cartItemFound.setQuantity(cartItemFound.getQuantity() + cartItem.getQuantity())
-        await this.cartStore.update(cartItemFound)
+        cartItemFound.setQuantity(cartItemFound.getQuantity() + quantity)
+        return await this.cartStore.update(cartItemFound)
       }
 
     } catch (error) {

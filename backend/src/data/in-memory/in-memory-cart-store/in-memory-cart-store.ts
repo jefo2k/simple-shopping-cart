@@ -8,9 +8,10 @@ export class InMemoryCartStore implements CartStore {
 
   private cart: Array<CartItem> = []
   
-  async save (cartItem: CartItem): Promise<void> {
+  async save (cartItem: CartItem): Promise<string> {
     this.addCallsCount++
     this.cart.push(cartItem)
+    return cartItem.getCartId()
   }
   
   async loadAll (tenantId: string, cartId: string): Promise<CartItem[]> {
@@ -18,7 +19,7 @@ export class InMemoryCartStore implements CartStore {
     return this.cart.filter(i => i.getTenantId() === tenantId && i.getCartId() === cartId)
   }
 
-  async update (cartItem: CartItem): Promise<void> {
+  async update (cartItem: CartItem): Promise<string> {
     this.updateCallsCount++
     const foundCarItem = this.cart.find(i => 
       i.getTenantId() === cartItem.getTenantId() && 
@@ -28,5 +29,6 @@ export class InMemoryCartStore implements CartStore {
     if (foundCarItem) {
       foundCarItem.setQuantity(cartItem.getQuantity())
     }
+    return cartItem.getCartId()
   }
 }

@@ -1,5 +1,5 @@
-import { CartItem } from '../../domain/entities'
+import { AddToCartDto } from '../../dtos/add-to-cart-dto';
 
 export interface AddCartItem {
-  add: (cartItem: CartItem) => void
+  add: (addToCartDto: AddToCartDto, tenantId: string) => Promise<string>
 }

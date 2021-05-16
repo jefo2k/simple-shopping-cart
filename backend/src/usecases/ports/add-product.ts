@@ -1,5 +1,5 @@
 import { Product } from '../../domain/entities'
 
 export interface AddProduct {
-  add: (product: Product) => void
+  add: (product: Product) => Promise<string>
 }
