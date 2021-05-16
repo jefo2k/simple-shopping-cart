@@ -49,7 +49,7 @@ export default {
     // local
     // baseURL: process.env.API_BASE_URL || 'http://localhost:3000'
     // dev
-    baseURL: process.env.API_BASE_URL || 'https://eswjcq02ak.execute-api.us-east-2.amazonaws.com/dev/tenant/5ecfe430-d635-4139-ae6c-8606c2aacbf8'
+    baseURL: process.env.API_BASE_URL || 'https://mzhan7d5y5.execute-api.us-east-2.amazonaws.com/dev/tenant/5ecfe430-d635-4139-ae6c-8606c2aacbf8'
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
