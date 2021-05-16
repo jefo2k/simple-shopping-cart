@@ -45,8 +45,8 @@ export class AddItemToCart implements AddCartItem {
     } 
   }
 
-  private async getCartItemByProductID(tenantId: string, cartItemId: string, productId: string) {
-    const cartItems = await this.cartStore.loadAll(tenantId, cartItemId)
+  private async getCartItemByProductID(tenantId: string, cartId: string, productId: string) {
+    const cartItems = await this.cartStore.loadAll(tenantId, cartId)
 
     const cartItem = cartItems.find(c => c.getProductId() === productId)
     return cartItem
