@@ -10,6 +10,16 @@ export class DynamodbCartStore implements CartStore {
     private readonly cartsIndex = process.env.CARTS_INDEX_NAME
   ) {}
 
+  async removeByProduct (cartId: string, productId: string): Promise<void> {
+    await this.docClient.delete({
+      TableName: this.cartsTable,
+      Key: {
+        cartId,
+        productId
+      }
+    }).promise()
+  }
+
   async save (cartItem: CartItem): Promise<string> {
     const cartItemData = {
       tenantId: cartItem.getTenantId(),
@@ -23,8 +33,6 @@ export class DynamodbCartStore implements CartStore {
       TableName: this.cartsTable,
       Item: cartItemData
     }).promise()
-
-    console.log('### result: ', result)
 
     return cartItem.getCartId()
   }
@@ -82,9 +90,7 @@ export class DynamodbCartStore implements CartStore {
     }).promise()
 
     if (result.Items && result.Items.length > 0) {
-      console.log('### result.Items: ', result.Items)
       const response = result.Items[0]
-      console.log('### response: ', response)
       return new CartItem(response.tenantId, response.cartId, response.productId, response.quantity)
     } else {
       return undefined

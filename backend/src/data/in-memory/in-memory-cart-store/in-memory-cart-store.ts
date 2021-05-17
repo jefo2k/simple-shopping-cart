@@ -5,9 +5,17 @@ export class InMemoryCartStore implements CartStore {
   addCallsCount = 0
   updateCallsCount = 0
   loadCallsCount = 0
+  removeCallsCount = 0
   
   private cart: Array<CartItem> = []
   
+  async removeByProduct (cartId: string, productId: string): Promise<void> {
+    this.removeCallsCount ++
+    this.cart = this.cart.filter(ci => {
+      return ci.getCartId() === cartId && ci.getProductId() !== productId
+    })
+  }
+
   async loadByProductId (cartId: string, productId: string): Promise<CartItem> {
     const cartItem = this.cart.find(c => c.getCartId() === cartId && c.getProductId() === productId)
     return cartItem

@@ -5,4 +5,5 @@ export interface CartStore {
   update: (cartItem: CartItem) => Promise<string>
   loadAll: (tenantId: string, cartId: string) => Promise<CartItem[]>
   loadByProductId: (cartId: string, productId: string) => Promise<CartItem>
+  removeByProduct: (cartId: string, productId: string) => Promise<void>
 }
