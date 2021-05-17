@@ -23,11 +23,16 @@
                 Add
               </a-button>
             </a-badge>
-            <a-button type="primary" icon="minus-circle" size="large" style="width: 125px;" disabled>
-              Remove
-            </a-button>
-            <!-- <a-icon type="shopping-cart" :style="{ fontSize: '22px' }" />
-            <a-icon type="plus-circle" /> -->
+            <a-popconfirm 
+              title="All product items will be removed from the cart. Are you sure?!?"
+              :disabled="!getSelectedQuantity(product.productId)"
+              @confirm="removeFromCart(product.productId)"
+              >
+              <a-button type="primary" icon="minus-circle" size="large" style="width: 125px;" :disabled="!getSelectedQuantity(product.productId)">
+                Remove
+              </a-button>
+              <a-icon slot="icon" type="warning" style="color: red" />
+            </a-popconfirm>
           </template>
           <a-card-meta :title="product.name" :description="product.description" />
         </a-card>
@@ -71,10 +76,20 @@ export default {
       this.$store.commit('cart/add', cart)
       localStorage.setItem('cartId', JSON.stringify(cart.id))
     },
+    async removeFromCart(productId) {
+      if (this.cartId) {
+        const response = await this.$axios.delete(`/cart/${this.cartId}/product/${productId}`)
+        const cart = response.data.cart
+        this.$store.commit('cart/add', cart)
+        localStorage.setItem('cartId', JSON.stringify(cart.id))
+      }
+    },
     async fetchCart() {
-      const response = await this.$axios.get(`/cart/${this.cartId}`)
-      const cart = response.data.cart
-      this.$store.commit('cart/add', cart)
+      if (this.cartId) {
+        const response = await this.$axios.get(`/cart/${this.cartId}`)
+        const cart = response.data.cart
+        this.$store.commit('cart/add', cart)
+      }
     },
     getSelectedQuantity(productId) {
       const cart = this.$store.state.cart.cart
