@@ -6,8 +6,8 @@ import { CartStore } from '../../ports'
 export class DynamodbCartStore implements CartStore {
   constructor (
     private readonly docClient: DocumentClient = new AWS.DynamoDB.DocumentClient(),
-    private readonly cartTable = process.env.CART_TABLE,
-    private readonly inventoryIndex = process.env.CART_INDEX_NAME
+    private readonly cartsTable = process.env.CARTS_TABLE,
+    private readonly cartsIndex = process.env.CARTS_INDEX_NAME
   ) {}
 
   async save (cartItem: CartItem): Promise<string> {
@@ -20,7 +20,7 @@ export class DynamodbCartStore implements CartStore {
       updatedAt: cartItem.getUpdatedAtISOStr()
     }
     const result = await this.docClient.put({
-      TableName: this.cartTable,
+      TableName: this.cartsTable,
       Item: cartItemData
     }).promise()
 
@@ -37,7 +37,7 @@ export class DynamodbCartStore implements CartStore {
     const newUpdatedAt = changedCartItem.getUpdatedAtISOStr()
 
     const params = {
-      TableName: this.cartTable,
+      TableName: this.cartsTable,
       Key: {
         cartId,
         productId
@@ -58,8 +58,8 @@ export class DynamodbCartStore implements CartStore {
   
   async loadAll (tenantId: string, cartId: string): Promise<CartItem[]> {
     const result = await this.docClient.query({
-      TableName: this.cartTable,
-      IndexName: this.inventoryIndex,
+      TableName: this.cartsTable,
+      IndexName: this.cartsIndex,
       KeyConditionExpression: 'tenantId = :tenantId and cartId = :cartId',
       ExpressionAttributeValues: {
         ':tenantId': tenantId,
@@ -73,7 +73,7 @@ export class DynamodbCartStore implements CartStore {
 
   async loadByProductId (cartId: string, productId: string): Promise<CartItem> {
     const result = await this.docClient.query({
-      TableName: this.cartTable,
+      TableName: this.cartsTable,
       KeyConditionExpression: 'cartId = :cartId and productId = :productId',
       ExpressionAttributeValues: {
         ':cartId': cartId,
