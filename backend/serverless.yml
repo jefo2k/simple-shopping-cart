@@ -44,6 +44,24 @@ functions:
           - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}
 
+  fetchCart:
+    handler: src/lambda/http/fetch-cart.handler
+    events:
+      - http:
+          method: get
+          path: tenant/{tenantId}/cart/{cartId}
+          cors: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.CARTS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.CARTS_TABLE}/index/${self:provider.environment.CARTS_INDEX_NAME}
+
+
   addToCart:
     handler: src/lambda/http/add-to-cart.handler
     events:
