@@ -19,12 +19,12 @@
 <script>
 export default {
   data () {
-    return {
-    }
+    return {}
   },
   computed: {
     itemsQuantity() {
-      return this.$store.state.cart.items.reduce((acc, i) => acc + i.quantity, 0)
+      const cart = this.$store.state.cart.cart
+      return cart.items.reduce((acc, i) => acc + i.quantity, 0)
     }
   }
 }

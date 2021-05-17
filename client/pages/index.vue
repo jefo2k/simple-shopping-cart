@@ -11,14 +11,14 @@
             <a-icon type="frown" theme="twoTone" />
           </span>
         </a-empty>
-        <a-card hoverable class="product" v-for="product in productList" :key="product.id">
+        <a-card hoverable class="product" v-for="product in productList" :key="product.productId">
           <img
             slot="cover"
             :alt="product.name"
             :src="product.thumbUrl"
           />
           <template slot="actions" class="ant-card-actions">
-            <a-button type="primary" icon="plus-circle" size="large" style="width: 275px;" @click="addToCart(product.id, 1)">
+            <a-button type="primary" icon="plus-circle" size="large" style="width: 275px;" @click="addToCart(product.productId, 1)">
               Add to cart
             </a-button>
             <!-- <a-icon type="shopping-cart" :style="{ fontSize: '22px' }" />
@@ -46,17 +46,37 @@ export default {
   },
   data () {
     return {
+      cartId: undefined
     }
   },
   computed: {
-    shoppingCart() {
-      return this.$store.state.cart.items
+    cart() {
+      return this.$store.state.cart.cart
     }
   },
   methods: {
-    addToCart(productId, quantity) {
-      this.$store.commit('cart/add', { productId, quantity })
+    async addToCart(productId, quantity) {
+      const params = {
+        cartId: (this.cart ? this.cart.id : undefined),
+        productId,
+        quantity
+      }
+      const response = await this.$axios.post('/cart', params)
+      const cart = response.data.cart
+      this.$store.commit('cart/add', cart)
+      localStorage.setItem('cartId', JSON.stringify(cart.id))
     },
+    async fetchCart() {
+      const response = await this.$axios.get(`/cart/${this.cartId}`)
+      const cart = response.data.cart
+      this.$store.commit('cart/add', cart)
+    }
+  },
+  mounted() {
+    this.cartId = JSON.parse(localStorage.getItem('cartId')) || undefined
+    if (this.cartId) {
+      this.fetchCart()
+    }
   }
 }
 </script>
