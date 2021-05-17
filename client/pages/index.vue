@@ -19,7 +19,13 @@
           />
           <template slot="actions" class="ant-card-actions">
             <a-badge :count="getSelectedQuantity(product.productId)" :style="{ zIndex: 0 }">
-              <a-button type="primary" icon="plus-circle" size="large" style="width: 125px;" @click="addToCart(product.productId, 1)">
+              <a-button 
+                type="primary" 
+                icon="plus-circle" 
+                size="large" 
+                style="width: 125px;" 
+                :loading="addingProductToCart"
+                @click="addToCart(product.productId, 1)">
                 Add
               </a-button>
             </a-badge>
@@ -28,7 +34,13 @@
               :disabled="!getSelectedQuantity(product.productId)"
               @confirm="removeFromCart(product.productId)"
               >
-              <a-button type="primary" icon="minus-circle" size="large" style="width: 125px;" :disabled="!getSelectedQuantity(product.productId)">
+              <a-button 
+                type="primary" 
+                icon="minus-circle" 
+                size="large" 
+                style="width: 125px;" 
+                :loading="removingProductFromCart"
+                :disabled="!getSelectedQuantity(product.productId)">
                 Remove
               </a-button>
               <a-icon slot="icon" type="warning" style="color: red" />
@@ -56,7 +68,9 @@ export default {
   },
   data () {
     return {
-      cartId: undefined
+      cartId: undefined,
+      addingProductToCart: false,
+      removingProductFromCart: false
     }
   },
   computed: {
@@ -66,6 +80,7 @@ export default {
   },
   methods: {
     async addToCart(productId, quantity) {
+      this.addingProductToCart = true
       const params = {
         cartId: (this.cart ? this.cart.id : undefined),
         productId,
@@ -75,13 +90,16 @@ export default {
       const cart = response.data.cart
       this.$store.commit('cart/add', cart)
       localStorage.setItem('cartId', JSON.stringify(cart.id))
+      this.addingProductToCart = false
     },
     async removeFromCart(productId) {
       if (this.cartId) {
+        this.removingProductFromCart = true
         const response = await this.$axios.delete(`/cart/${this.cartId}/product/${productId}`)
         const cart = response.data.cart
         this.$store.commit('cart/add', cart)
         localStorage.setItem('cartId', JSON.stringify(cart.id))
+        this.removingProductFromCart = false
       }
     },
     async fetchCart() {
@@ -100,9 +118,7 @@ export default {
   },
   mounted() {
     this.cartId = JSON.parse(localStorage.getItem('cartId')) || undefined
-    if (this.cartId) {
-      this.fetchCart()
-    }
+    this.fetchCart()
   }
 }
 </script>
