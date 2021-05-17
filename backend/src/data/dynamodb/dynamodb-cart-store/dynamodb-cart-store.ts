@@ -2,6 +2,9 @@ import * as AWS  from 'aws-sdk'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { CartItem } from '../../../domain/entities'
 import { CartStore } from '../../ports'
+import { createLogger } from '../../../utils/logger'
+
+const logger = createLogger('Cart Dynamodb Store')
 
 export class DynamodbCartStore implements CartStore {
   constructor (
@@ -11,6 +14,8 @@ export class DynamodbCartStore implements CartStore {
   ) {}
 
   async removeByProduct (cartId: string, productId: string): Promise<void> {
+    logger.info('Remove cart from product: ', { cartId, productId })
+
     await this.docClient.delete({
       TableName: this.cartsTable,
       Key: {
@@ -21,6 +26,8 @@ export class DynamodbCartStore implements CartStore {
   }
 
   async save (cartItem: CartItem): Promise<string> {
+    logger.info('Persisting cart item')
+    
     const cartItemData = {
       tenantId: cartItem.getTenantId(),
       cartId: cartItem.getCartId(),
@@ -29,15 +36,21 @@ export class DynamodbCartStore implements CartStore {
       createdAt: cartItem.getCreatedAtISOStr(),
       updatedAt: cartItem.getUpdatedAtISOStr()
     }
+    
     const result = await this.docClient.put({
       TableName: this.cartsTable,
       Item: cartItemData
     }).promise()
 
+    const cartId = cartItem.getCartId()
+
+    logger.info('Cart item persisted: ', { cartId })
+
     return cartItem.getCartId()
   }
   
   async update (changedCartItem: CartItem): Promise<string> {
+    logger.info('Updating cart item')
     
     const cartId = changedCartItem.getCartId()
     const productId = changedCartItem.getProductId()
@@ -60,11 +73,14 @@ export class DynamodbCartStore implements CartStore {
 
     const result = await this.docClient.update(params).promise()
 
-    // return result.Attributes as TodoItem
+    logger.info('Cart item updated: ', { cartId })
+
     return result.Attributes.cartId
   }
   
   async loadAll (tenantId: string, cartId: string): Promise<CartItem[]> {
+    logger.info('Load all cart items from cart: ', { cartId })
+
     const result = await this.docClient.query({
       TableName: this.cartsTable,
       IndexName: this.cartsIndex,
@@ -80,6 +96,8 @@ export class DynamodbCartStore implements CartStore {
   }
 
   async loadByProductId (cartId: string, productId: string): Promise<CartItem> {
+    logger.info('Load cart item with product: ', { cartId, productId })
+
     const result = await this.docClient.query({
       TableName: this.cartsTable,
       KeyConditionExpression: 'cartId = :cartId and productId = :productId',
@@ -95,7 +113,6 @@ export class DynamodbCartStore implements CartStore {
     } else {
       return undefined
     }
-
   }
 
 }

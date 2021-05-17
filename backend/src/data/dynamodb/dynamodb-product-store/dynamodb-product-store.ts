@@ -2,7 +2,9 @@ import * as AWS  from 'aws-sdk'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { Product } from '../../../domain/entities'
 import { ProductStore } from '../../ports'
+import { createLogger } from '../../../utils/logger'
 
+const logger = createLogger('Product Dynamodb Store')
 
 export class DynamodbProductStore implements ProductStore {
   constructor(
@@ -13,6 +15,8 @@ export class DynamodbProductStore implements ProductStore {
   save: (product: Product) => Promise<string>
   
   async loadById (tenantId: string, productId: string): Promise<Product> {
+    logger.info('Load product : ', { productId })
+
     const result = await this.docClient.query({
       TableName: this.productsTable,
       KeyConditionExpression: 'tenantId = :tenantId and productId = :productId',
@@ -29,6 +33,8 @@ export class DynamodbProductStore implements ProductStore {
   }
 
   async loadAll (tenantId: string): Promise<Product[]> {
+    logger.info('Load all products from tenant : ', { tenantId })
+
     const result = await this.docClient.query({
       TableName: this.productsTable,
       KeyConditionExpression: 'tenantId = :tenantId',

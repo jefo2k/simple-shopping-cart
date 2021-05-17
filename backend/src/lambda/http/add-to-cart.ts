@@ -1,12 +1,16 @@
 import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda'
-import { AddItemToCart } from '../../usecases'
+import { AddItemToCart, LoadItemsFromCart } from '../../usecases'
 import { makeAddItemToCart } from '../../main/factories/make-add-item-to-cart'
+import { makeLoadItemsFromCart } from '../../main/factories/make-load-items-from-cart'
 import { AddToCartDto } from '../../dtos'
-import { LoadItemsFromCart } from '../../usecases/load-items-from-cart/load-items-from-cart';
-import { makeLoadItemsFromCart } from '../../main/factories/make-load-items-from-cart';
+import { createLogger } from '../../utils/logger';
+
+const logger = createLogger('Add to Cart Lambda Function')
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+  logger.info('Processing event: ', { event })
+
   const addItemToCartUc: AddItemToCart = makeAddItemToCart()
   const loadItemsFromCartUc: LoadItemsFromCart = makeLoadItemsFromCart()
 
@@ -30,6 +34,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
       }, null, 2)
     }
   } catch (error) {
+    logger.error('Error saving cart', { error })
     throw new Error(error)
   }
 }

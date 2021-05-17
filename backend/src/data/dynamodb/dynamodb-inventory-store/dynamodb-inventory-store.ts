@@ -2,6 +2,9 @@ import * as AWS  from 'aws-sdk'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { InventoryItem } from '../../../domain/entities'
 import { InventoryStore } from '../../ports'
+import { createLogger } from '../../../utils/logger'
+
+const logger = createLogger('Inventory Dynamodb Store')
 
 export class DynamodbInventoryStore implements InventoryStore {
   constructor(
@@ -13,6 +16,8 @@ export class DynamodbInventoryStore implements InventoryStore {
   save: (inventoryItem: InventoryItem) => Promise<void>
   
   async loadById (tenantId: string, productId: string): Promise<InventoryItem> {
+    logger.info('Load inventory item : ', { productId })
+
     const result = await this.docClient.query({
       TableName: this.inventoryTable,
       // IndexName: this.inventoryIndex,
@@ -29,6 +34,8 @@ export class DynamodbInventoryStore implements InventoryStore {
   }
 
   async loadAll (tenantId: string): Promise<InventoryItem[]> {
+    logger.info('Load all inventory items from tenant : ', { tenantId })
+
     const result = await this.docClient.query({
       TableName: this.inventoryTable,
       // IndexName: this.inventoryIndex,
