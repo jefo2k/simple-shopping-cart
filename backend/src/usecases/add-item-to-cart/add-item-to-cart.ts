@@ -12,7 +12,7 @@ export class AddItemToCart implements AddCartItem {
   ) {}
 
   async add(addToCartDto: AddToCartDto, tenantId: string): Promise<string> {
-    const { cartId = uuid.v4(), productId, quantity } = addToCartDto
+    const { cartId = uuid.v4(), productId, quantity = 1 } = addToCartDto
     
     try {
       // checks if product exists
