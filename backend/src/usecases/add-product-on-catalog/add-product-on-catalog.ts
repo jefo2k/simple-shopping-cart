@@ -7,14 +7,14 @@ export class AddProductOnCatalog implements AddProduct {
     private readonly productStore: ProductStore
   ) {}
 
-  async add(product: Product): Promise<void> {
+  async add(product: Product): Promise<string> {
     const isProductAlreadyInCatalog = !!await this.productStore.loadById(product.getTenantId(), product.getProductId())
 
     if (isProductAlreadyInCatalog) {
       throw new Error('product already exists')
     }
 
-    this.productStore.save(product)
+    return await this.productStore.save(product)
   }
 
 }

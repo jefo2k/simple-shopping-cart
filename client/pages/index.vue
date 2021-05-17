@@ -5,24 +5,51 @@
         Products
       </h1>
       <div class="products">
-        <a-card hoverable class="product" v-for="product in productList" :key="product.id">
+        <a-empty v-if="!productList.length">
+          <span slot="description">
+            Sorry! There is no available products in this store! 
+            <a-icon type="frown" theme="twoTone" />
+          </span>
+        </a-empty>
+        <a-card hoverable class="product" v-for="product in productList" :key="product.productId">
           <img
             slot="cover"
             :alt="product.name"
             :src="product.thumbUrl"
           />
           <template slot="actions" class="ant-card-actions">
-            <a-button type="primary" icon="plus-circle" size="large" style="width: 275px;" @click="addToCart(product.id, 1)">
-              Add to cart
-            </a-button>
-            <!-- <a-icon type="shopping-cart" :style="{ fontSize: '22px' }" />
-            <a-icon type="plus-circle" /> -->
+            <a-badge :count="getSelectedQuantity(product.productId)" :style="{ zIndex: 0 }">
+              <a-button 
+                type="primary" 
+                icon="plus-circle" 
+                size="large" 
+                style="width: 125px;" 
+                :loading="addingProductToCart"
+                @click="addToCart(product.productId, 1)">
+                Add
+              </a-button>
+            </a-badge>
+            <a-popconfirm 
+              title="All product items will be removed from the cart. Are you sure?!?"
+              :disabled="!getSelectedQuantity(product.productId)"
+              @confirm="removeFromCart(product.productId)"
+              >
+              <a-button 
+                type="primary" 
+                icon="minus-circle" 
+                size="large" 
+                style="width: 125px;" 
+                :loading="removingProductFromCart"
+                :disabled="!getSelectedQuantity(product.productId)">
+                Remove
+              </a-button>
+              <a-icon slot="icon" type="warning" style="color: red" />
+            </a-popconfirm>
           </template>
           <a-card-meta :title="product.name" :description="product.description" />
         </a-card>
       </div>
       <div>
-        :: {{ shoppingCart }}
       </div>
     </div>
   </div>
@@ -41,17 +68,57 @@ export default {
   },
   data () {
     return {
+      cartId: undefined,
+      addingProductToCart: false,
+      removingProductFromCart: false
     }
   },
   computed: {
-    shoppingCart() {
-      return this.$store.state.cart.items
+    cart() {
+      return this.$store.state.cart.cart
     }
   },
   methods: {
-    addToCart(productId, quantity) {
-      this.$store.commit('cart/add', { productId, quantity })
+    async addToCart(productId, quantity) {
+      this.addingProductToCart = true
+      const params = {
+        cartId: (this.cart ? this.cart.id : undefined),
+        productId,
+        quantity
+      }
+      const response = await this.$axios.post('/cart', params)
+      const cart = response.data.cart
+      this.$store.commit('cart/add', cart)
+      localStorage.setItem('cartId', JSON.stringify(cart.id))
+      this.addingProductToCart = false
     },
+    async removeFromCart(productId) {
+      if (this.cartId) {
+        this.removingProductFromCart = true
+        const response = await this.$axios.delete(`/cart/${this.cartId}/product/${productId}`)
+        const cart = response.data.cart
+        this.$store.commit('cart/add', cart)
+        localStorage.setItem('cartId', JSON.stringify(cart.id))
+        this.removingProductFromCart = false
+      }
+    },
+    async fetchCart() {
+      if (this.cartId) {
+        const response = await this.$axios.get(`/cart/${this.cartId}`)
+        const cart = response.data.cart
+        this.$store.commit('cart/add', cart)
+      }
+    },
+    getSelectedQuantity(productId) {
+      const cart = this.$store.state.cart.cart
+      return cart.items.reduce((acc, i) => {
+        return i.productId === productId ? acc + i.quantity : acc
+      }, 0)
+    }
+  },
+  mounted() {
+    this.cartId = JSON.parse(localStorage.getItem('cartId')) || undefined
+    this.fetchCart()
   }
 }
 </script>
@@ -79,9 +146,10 @@ export default {
     sans-serif;
   display: block;
   font-weight: 300;
-  font-size: 72px;
+  font-size: 70px;
   color: #35495e;
   letter-spacing: 1px;
+  padding-top: 25px;
 }
 
 .subtitle {
@@ -96,6 +164,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  padding-bottom: 50px;
 }
 
 .product {

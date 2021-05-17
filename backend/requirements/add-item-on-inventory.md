@@ -1,4 +1,4 @@
-# Add item on inventory
+# Add item on an inventory
 
 ## Success case
 

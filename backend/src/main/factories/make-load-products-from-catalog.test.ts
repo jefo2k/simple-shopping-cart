@@ -9,11 +9,4 @@ describe('MakeLoadProductsFromCatalog factory tests', () => {
     expect(loadProductFromCatalog).toBeInstanceOf(LoadProductsFromCatalog)
   })
 
-  it.skip('should have loaded products', async () => {
-    const loadProductFromCatalog: LoadProducts = makeLoadProductsFromCatalog()
-    const productList = await loadProductFromCatalog.load('tenantId')
-
-    expect(productList).toHaveLength(3)
-  })
-
 })

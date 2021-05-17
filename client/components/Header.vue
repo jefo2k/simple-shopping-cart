@@ -1,38 +1,30 @@
 <template>
-  <a-page-header
-    title="Simple Shopping Cart App"
-    tag="beta"
-    class="header"
-  >
-    <template slot="tags">
+  <div class="header">
+    <div>
+      <span class="header-title">Simple Shopping Cart</span>
       <a-tag color="blue">
-        Beta
+        beta
       </a-tag>
-    </template>
-    <template slot="extra">
-        <!-- 
-          <a-button>
-          Sign in
-        </a-button> 
-        -->
-      <a-badge :count="itemsQuantity" :offset="[-17,11]" style="width: 46px;">
+    </div>
+    <div>
+      <a-badge :count="itemsQuantity">
         <a href="#">
-          <a-icon type="shopping-cart" :style="{ fontSize: '22px' }" />
+          <a-icon type="shopping-cart" :style="{ fontSize: '20px' }" />
         </a>
       </a-badge>
-    </template>
-  </a-page-header>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
   data () {
-    return {
-    }
+    return {}
   },
   computed: {
     itemsQuantity() {
-      return this.$store.state.cart.items.reduce((acc, i) => acc + i.quantity, 0)
+      const cart = this.$store.state.cart.cart
+      return cart.items.reduce((acc, i) => acc + i.quantity, 0)
     }
   }
 }
@@ -42,9 +34,15 @@ export default {
 .header {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-between;
 
   background: #D2EAFF;
   color: rgba(0, 0, 0, 0.65);
+}
+.header-title {
+  font-weight: 500;
+  font-size: 16px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 </style>

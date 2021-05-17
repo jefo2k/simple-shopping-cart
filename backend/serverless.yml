@@ -21,12 +21,18 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-2'}
 
+  tracing:
+    lambda: true
+    apiGateway: true
+
   apiGateway:
     minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
     PRODUCTS_TABLE: products-${self:provider.stage}
-    PRODUCTS_INDEX_NAME: products-index
+    INVENTORY_TABLE: inventory-${self:provider.stage}
+    CARTS_TABLE: carts-${self:provider.stage}
+    CARTS_INDEX_NAME: carts-by-tenant-index
 
 functions:
   loadProducts:
@@ -41,10 +47,71 @@ functions:
         Action:
           - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}
+
+  fetchCart:
+    handler: src/lambda/http/fetch-cart.handler
+    events:
+      - http:
+          method: get
+          path: tenant/{tenantId}/cart/{cartId}
+          cors: true
+    iamRoleStatements:
       - Effect: Allow
         Action:
           - dynamodb:Query
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}/index/${self:provider.environment.PRODUCTS_INDEX_NAME}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.CARTS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.CARTS_TABLE}/index/${self:provider.environment.CARTS_INDEX_NAME}
+
+  removeFromCart:
+    handler: src/lambda/http/remove-from-cart.handler
+    events:
+      - http:
+          method: delete
+          path: tenant/{tenantId}/cart/{cartId}/product/{productId}
+          cors: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+          - dynamodb:deleteItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.CARTS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.CARTS_TABLE}/index/${self:provider.environment.CARTS_INDEX_NAME}
+
+  addToCart:
+    handler: src/lambda/http/add-to-cart.handler
+    events:
+      - http:
+          method: post
+          path: tenant/{tenantId}/cart
+          cors: true
+          request:
+            schema:
+              application/json: ${file(src/lambda/http/validators/add-to-cart-request.json)}
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PRODUCTS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.INVENTORY_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+          - dynamodb:PutItem
+          - dynamodb:UpdateItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.CARTS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.CARTS_TABLE}/index/${self:provider.environment.CARTS_INDEX_NAME}
 
 resources:
   Resources:
@@ -57,21 +124,63 @@ resources:
             AttributeType: S
           - AttributeName: productId
             AttributeType: S
-          - AttributeName: createdAt
+        KeySchema:
+          - AttributeName: tenantId
+            KeyType: HASH
+          - AttributeName: productId
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.PRODUCTS_TABLE}
+
+    InventoryTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: tenantId
+            AttributeType: S
+          - AttributeName: productId
             AttributeType: S
         KeySchema:
           - AttributeName: tenantId
             KeyType: HASH
           - AttributeName: productId
             KeyType: RANGE
-        LocalSecondaryIndexes:
-          - IndexName: ${self:provider.environment.PRODUCTS_INDEX_NAME}
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.INVENTORY_TABLE}
+
+    CartTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: cartId
+            AttributeType: S
+          - AttributeName: productId
+            AttributeType: S
+          - AttributeName: tenantId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: cartId
+            KeyType: HASH
+          - AttributeName: productId
+            KeyType: RANGE
+        GlobalSecondaryIndexes:
+          - IndexName: ${self:provider.environment.CARTS_INDEX_NAME}
             KeySchema:
               - AttributeName: tenantId
                 KeyType: HASH
-              - AttributeName: createdAt
+              - AttributeName: cartId
                 KeyType: RANGE
             Projection:
-              ProjectionType: ALL # What attributes will be copied to an index
+              ProjectionType: ALL
         BillingMode: PAY_PER_REQUEST
-        TableName: ${self:provider.environment.PRODUCTS_TABLE}
+        TableName: ${self:provider.environment.CARTS_TABLE}
+
+    GatewayResponseDefault4XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+          gatewayresponse.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST'"
+        ResponseType: DEFAULT_4XX
+        RestApiId: !Ref ApiGatewayRestApi

@@ -1,4 +1,7 @@
 export * from './add-product-on-catalog/add-product-on-catalog'
 export * from './add-item-on-inventory/add-item-on-inventory'
+export * from './add-item-to-cart/add-item-to-cart'
 export * from './load-products-from-catalog/load-products-from-catalog'
 export * from './load-items-from-inventory/load-items-from-inventory'
+export * from './load-items-from-cart/load-items-from-cart'
+export * from './remove-item-from-cart/remove-item-from-cart'
