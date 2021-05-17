@@ -18,8 +18,13 @@
             :src="product.thumbUrl"
           />
           <template slot="actions" class="ant-card-actions">
-            <a-button type="primary" icon="plus-circle" size="large" style="width: 275px;" @click="addToCart(product.productId, 1)">
-              Add to cart
+            <a-badge :count="getSelectedQuantity(product.productId)" :style="{ zIndex: 0 }">
+              <a-button type="primary" icon="plus-circle" size="large" style="width: 125px;" @click="addToCart(product.productId, 1)">
+                Add
+              </a-button>
+            </a-badge>
+            <a-button type="primary" icon="minus-circle" size="large" style="width: 125px;" disabled>
+              Remove
             </a-button>
             <!-- <a-icon type="shopping-cart" :style="{ fontSize: '22px' }" />
             <a-icon type="plus-circle" /> -->
@@ -70,6 +75,12 @@ export default {
       const response = await this.$axios.get(`/cart/${this.cartId}`)
       const cart = response.data.cart
       this.$store.commit('cart/add', cart)
+    },
+    getSelectedQuantity(productId) {
+      const cart = this.$store.state.cart.cart
+      return cart.items.reduce((acc, i) => {
+        return i.productId === productId ? acc + i.quantity : acc
+      }, 0)
     }
   },
   mounted() {
