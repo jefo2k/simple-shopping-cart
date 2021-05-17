@@ -7,8 +7,7 @@ import { ProductStore } from '../../ports'
 export class DynamodbProductStore implements ProductStore {
   constructor(
     private readonly docClient: DocumentClient = new AWS.DynamoDB.DocumentClient(),
-    private readonly productsTable = process.env.PRODUCTS_TABLE,
-    private readonly productsIndex = process.env.PRODUCTS_INDEX_NAME
+    private readonly productsTable = process.env.PRODUCTS_TABLE
   ) {}
 
   save: (product: Product) => Promise<string>
@@ -16,7 +15,6 @@ export class DynamodbProductStore implements ProductStore {
   async loadById (tenantId: string, productId: string): Promise<Product> {
     const result = await this.docClient.query({
       TableName: this.productsTable,
-      IndexName: this.productsIndex,
       KeyConditionExpression: 'tenantId = :tenantId and productId = :productId',
       ExpressionAttributeValues: {
         ':tenantId': tenantId,
@@ -33,7 +31,6 @@ export class DynamodbProductStore implements ProductStore {
   async loadAll (tenantId: string): Promise<Product[]> {
     const result = await this.docClient.query({
       TableName: this.productsTable,
-      IndexName: this.productsIndex,
       KeyConditionExpression: 'tenantId = :tenantId',
       ExpressionAttributeValues: {
         ':tenantId': tenantId
