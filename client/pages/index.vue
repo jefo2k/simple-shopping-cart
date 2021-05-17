@@ -5,6 +5,12 @@
         Products
       </h1>
       <div class="products">
+        <a-empty v-if="!productList.length">
+          <span slot="description">
+            Sorry! There is no available products in this store! 
+            <a-icon type="frown" theme="twoTone" />
+          </span>
+        </a-empty>
         <a-card hoverable class="product" v-for="product in productList" :key="product.id">
           <img
             slot="cover"
@@ -96,6 +102,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  padding-bottom: 50px;
 }
 
 .product {
