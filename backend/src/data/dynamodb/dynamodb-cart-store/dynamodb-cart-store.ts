@@ -1,14 +1,16 @@
 import * as AWS  from 'aws-sdk'
+import * as AWSXRay from 'aws-xray-sdk'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { CartItem } from '../../../domain/entities'
 import { CartStore } from '../../ports'
 import { createLogger } from '../../../utils/logger'
 
+const XAWS = AWSXRay.captureAWS(AWS)
 const logger = createLogger('Cart Dynamodb Store')
 
 export class DynamodbCartStore implements CartStore {
   constructor (
-    private readonly docClient: DocumentClient = new AWS.DynamoDB.DocumentClient(),
+    private readonly docClient: DocumentClient = createDynamoDBClient(),
     private readonly cartsTable = process.env.CARTS_TABLE,
     private readonly cartsIndex = process.env.CARTS_INDEX_NAME
   ) {}
@@ -115,4 +117,16 @@ export class DynamodbCartStore implements CartStore {
     }
   }
 
+}
+
+function createDynamoDBClient() {
+  if (process.env.IS_OFFLINE) {
+    console.log('Creating a local DynamoDB instance')
+    return new XAWS.DynamoDB.DocumentClient({
+      region: 'localhost',
+      endpoint: 'http://localhost:8000'
+    })
+  }
+
+  return new XAWS.DynamoDB.DocumentClient()
 }

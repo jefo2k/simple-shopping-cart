@@ -1,14 +1,16 @@
 import * as AWS  from 'aws-sdk'
+import * as AWSXRay from 'aws-xray-sdk'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { InventoryItem } from '../../../domain/entities'
 import { InventoryStore } from '../../ports'
 import { createLogger } from '../../../utils/logger'
 
+const XAWS = AWSXRay.captureAWS(AWS)
 const logger = createLogger('Inventory Dynamodb Store')
 
 export class DynamodbInventoryStore implements InventoryStore {
   constructor(
-    private readonly docClient: DocumentClient = new AWS.DynamoDB.DocumentClient(),
+    private readonly docClient: DocumentClient = createDynamoDBClient(),
     private readonly inventoryTable = process.env.INVENTORY_TABLE,
     // private readonly inventoryIndex = process.env.INVENTORY_INDEX_NAME
   ) {}
@@ -49,4 +51,16 @@ export class DynamodbInventoryStore implements InventoryStore {
     return productList as InventoryItem[]
   }
 
+}
+
+function createDynamoDBClient() {
+  if (process.env.IS_OFFLINE) {
+    console.log('Creating a local DynamoDB instance')
+    return new XAWS.DynamoDB.DocumentClient({
+      region: 'localhost',
+      endpoint: 'http://localhost:8000'
+    })
+  }
+
+  return new XAWS.DynamoDB.DocumentClient()
 }

@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Add/Update cart items",
+  "type": "object",
+  "properties": {
+    "cartId":{
+      "type": "string"
+    },
+    "productId": {
+      "type": "string"
+    },
+    "quantity": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "productId",
+    "quantity"
+  ],
+  "additionalProperties": false
+}
